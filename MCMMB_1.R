@@ -16,6 +16,7 @@ str(grid)
 head(grid)
 
 first <- grid[1,]
+second <- grid[2,]
 
 head(first)
 str(first)
@@ -34,3 +35,4 @@ str(first)
 
 plot(regio)
 plot(first, add=T, col='blue')
+plot(second, add=T, col = "red")
