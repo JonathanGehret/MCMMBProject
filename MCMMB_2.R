@@ -22,7 +22,6 @@ grid <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="all
 nature_reserve <- readOGR("data/nature_reserve_papua/nature_reserve/nature_reserve.shp", integer64="allow.loss")
 papua_borders <- readOGR("data/nature_reserve_papua/papua_borders/IDN_adm1.shp", integer64="allow.loss")
 
-
 str(grid)
 head(grid)
 
@@ -61,17 +60,4 @@ plot(antigone, add=T, col = "green")
 plot(nature_reserve, add=T, col= "purple")
 plot(papua_borders, add=T, col= "orange")
 
-# how to use gbif with R: https://www.youtube.com/watch?v=RACfDLBIL8A
-
-# comparison gbif dataset for Antigone rubicunda (eine Reiher art)  
-# https://www.gbif.org/species/9295466
-# GBIF.org (09 June 2021) GBIF Occurrence Download https://doi.org/10.15468/dl.6m2srw
-
-
-
-#gbif_antigone <- xmlParse(file= "data/gbif/antigone_rubicunda/dataset/4fa7b334-ce0d-4e88-aaae-2e0c138d049e.xml")
-#str(gbif_antigone)
-#plot(gbif_antigone)
-
-antigone_occ = read.table("data/gbif/antigone_rubicunda/occurrence.txt")
 
