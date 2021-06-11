@@ -1,10 +1,7 @@
 #package librarys
 
-# install.packages("XML") # zum einlesen von .xml files
 library(rgdal)
 library(raster)
-#library(XML)
-
 
 #Daten einlesen
 
@@ -12,9 +9,9 @@ setwd("/data")
 
 # ich würde vorschlagen, den working space zum Ort der Projekt-datei zu setzen und dann
 # immer, wenn data benötigt wird, das entsprechend anzugeben, zb:
-# grid <- readOGR("data/Birdlife_Papua.shp", integer64="allow.loss")
+grid <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="allow.loss")
  
-grid <- readOGR("Birdlife_Papua.shp", integer64="allow.loss")
+# grid <- readOGR("Birdlife_Papua.shp", integer64="allow.loss")
 
 #grid@proj4string <- CRS("+proj=longlat +ellps=WGS84 +no_defs") # remember to include coordinate system
 
@@ -30,23 +27,29 @@ species <- data.frame(species)
 
 first <- grid[1,]
 second <- grid[2,]
+antigone <- grid[42,]
 
 head(first)
 str(first)
 
 # reading in island borders
 
-regio <- readOGR("Papua_region.shp", integer64="allow.loss")
+regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allow.loss")
 
 str(regio)
 head(regio)
+
+regio$ADM1_NAME
+plot(regio[1,], add = T, col = "green")
+plot(regio[2,], add = T, col = "blue")
+
 
 # plotting
 
 plot(regio)
 plot(first, add=T, col='blue')
 plot(second, add=T, col = "red")
-
+plot(antigone, add=T, col = "green")
 
 # how to use gbif with R: https://www.youtube.com/watch?v=RACfDLBIL8A
 
@@ -60,5 +63,5 @@ plot(second, add=T, col = "red")
 #str(gbif_antigone)
 #plot(gbif_antigone)
 
-
+antigone_occ = read.table("data/gbif/antigone_rubicunda/occurrence.txt")
 
