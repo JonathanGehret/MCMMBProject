@@ -54,3 +54,12 @@ plot(regio)
 plot(first, add=T, col='blue')
 plot(second, add=T, col = "red")
 plot(antigone, add=T, col = "green")
+
+
+# random forsest
+#import the package
+#library(randomForest)
+# Perform training:
+#rf_classifier = randomForest(Species ~ ., data=training, ntree=100, mtry=2, importance=TRUE)
+#rf_classifier
+# https://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/
