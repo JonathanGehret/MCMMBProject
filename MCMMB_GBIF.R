@@ -89,4 +89,15 @@ test_map
 plot(test_map)
 plot(test_map2, add = T)
 test_map = map_fetch(taxonKey = 2480498)
-Ptilinopus_speciosus = map_fetch(taxonKey = 10689404)
+test_3 = map_fetch(taxonKey = 9295466, srs = "EPSG:3857")
+plot(test_3)
+
+#srs (character) Spatial reference system. One of:
+#  • EPSG:3857 (Web Mercator)
+#• EPSG:4326 (WGS84 plate care?)
+#• EPSG:3575 (Arctic LAEA on 10 degrees E)
+#• EPSG:3031 (Antarctic stereographic)
+
+# 1,455,702 records works (species 50, Echinodermata) 
+# Callipodida with 837 georeferenced records funktoinet auch!!!
+# genus grus with 2.4 mio einträgen klappt auch
