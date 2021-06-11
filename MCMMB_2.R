@@ -7,7 +7,7 @@ library(raster)
 
 #Daten einlesen
 
-#setwd("/data")
+setwd("/data")
 
 # ich würde vorschlagen, den working space zum Ort der Projekt-datei zu setzen und dann
 # immer, wenn data benötigt wird, das entsprechend anzugeben, zb:
@@ -41,7 +41,7 @@ str(first)
 
 # reading in island borders
 
-regio <- readOGR("data/gbif/Papua_Birdlife_project/Papua_region.shp", integer64="allow.loss")
+regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allow.loss")
 
 str(regio)
 head(regio)
@@ -50,6 +50,18 @@ regio$ADM1_NAME
 plot(regio[1,], add = T, col = "green")
 plot(regio[2,], add = T, col = "blue")
 
+
+#intersect land_reserv
+
+land_reserv <- intersect(regio, nature_reserve)
+
+plot(land_reserv)
+
+plot(regio)
+plot(land_reserv, add = T, col = "green")
+
+
+writeOGR(land_reserv, dsn ="C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/nature_reserve_papua", layer= "land_reserv", driver = "ESRI Shapefile")
 
 # plotting
 
