@@ -1,0 +1,2 @@
+When using this dataset please use the following citation and pay attention to the rights documented in rights.txt:
+Levatich T, Ligocki S (2020). EOD - eBird Observation Dataset. Cornell Lab of Ornithology. Occurrence dataset https://doi.org/10.15468/aomfnb accessed via GBIF.org on 2021-06-09.
