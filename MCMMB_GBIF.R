@@ -89,4 +89,4 @@ test_map
 plot(test_map)
 plot(test_map2, add = T)
 test_map = map_fetch(taxonKey = 2480498)
-                     
+Ptilinopus_speciosus = map_fetch(taxonKey = 10689404)

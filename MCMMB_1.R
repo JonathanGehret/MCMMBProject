@@ -10,7 +10,8 @@ library(protolite) # needed for rgbif::mvt_fetch
 
 #Daten einlesen
 
-setwd("/data")
+# setwd("/data")
+# working directory = project directory!
 
 # ich würde vorschlagen, den working space zum Ort der Projekt-datei zu setzen und dann
 # immer, wenn data benötigt wird, das entsprechend anzugeben, zb:
