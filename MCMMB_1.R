@@ -1,7 +1,10 @@
 #package librarys
 
+#install.packages("rgbif")
 library(rgdal)
 library(raster)
+library(rgbif) # api access for gbif
+library(maptools)
 
 #Daten einlesen
 
@@ -39,12 +42,11 @@ regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allo
 str(regio)
 head(regio)
 
+
+# plotting
 regio$ADM1_NAME
 plot(regio[1,], add = T, col = "green")
 plot(regio[2,], add = T, col = "blue")
-
-
-# plotting
 
 plot(regio)
 plot(first, add=T, col='blue')
@@ -65,3 +67,43 @@ plot(antigone, add=T, col = "green")
 
 antigone_occ = read.table("data/gbif/antigone_rubicunda/occurrence.txt")
 
+# trying rgbif
+# https://damariszurell.github.io/HU-GCIB/1_Data.html
+# https://cran.r-project.org/web/packages/rgbif/rgbif.pdf
+
+# Check out the number of occurrences found in GBIF:
+occ_count()
+
+# number of observations:
+occ_count(basisOfRecord='OBSERVATION')
+
+# number of occurrences reported for Germany:
+occ_count(country=isocodes[grep("Germany", isocodes$name), "code"])
+
+# number of observations reported for Germany:
+occ_count(country=isocodes[grep("Germany", isocodes$name), "code"],basisOfRecord='OBSERVATION')
+
+# adjusted for antigone
+# Check for synonyms
+name_suggest(q='Antigone rubicunda', rank='species')
+# no synonyms
+
+# Check number of records
+occ_search(scientificName = "Antigone rubicunda", limit = 10)
+
+# downloading and plotting
+# gbif_antigone <- occ_search(scientificName = "Antigone rubicunda",return='data', limit=500)
+occ_key <- name_suggest('Antigone rubicunda')$key[1]
+dat <- occ_search(taxonKey = occ_key, limit = 3, hasCoordinate = TRUE)
+# head( elevation(dat$data, username = user) )
+
+dat$data
+plot(dat$data[1,])
+
+# ?rgbif
+points(gbif_antigone$decimalLongitude, gbif_antigone$decimalLatidute, col = "red")
+str(gbif_antigone)
+head(gbif_antigone)
+
+# example use uf dataset_metrics
+dataset_metrics(uuid='863e6d6b-f602-4495-ac30-881482b6f799')
