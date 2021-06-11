@@ -19,8 +19,8 @@ grid <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="all
 
 # nature reserve data
 
-nature_reserve <- readOGR("data/nature_reserve_papua/nature_reserve/nature_reserve.shp", integer64="allow.loss")
-papua_borders <- readOGR("data/nature_reserve_papua/papua_borders/IDN_adm1.shp", integer64="allow.loss")
+nature_reserve <- readOGR("data/Indicator/nature_reserve_papua/nature_reserve/nature_reserve.shp", integer64="allow.loss")
+papua_borders <- readOGR("data/Indicator/nature_reserve_papua/papua_borders/IDN_adm1.shp", integer64="allow.loss")
 
 str(grid)
 head(grid)
@@ -41,7 +41,7 @@ str(first)
 
 # reading in island borders
 
-regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allow.loss")
+regio <- readOGR("data/gbif/Papua_Birdlife_project/Papua_region.shp", integer64="allow.loss")
 
 str(regio)
 head(regio)

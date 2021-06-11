@@ -5,7 +5,7 @@
 # https://www.gbif.org/species/9295466
 # GBIF.org (09 June 2021) GBIF Occurrence Download https://doi.org/10.15468/dl.6m2srw
 
-
+library(raster)
 
 #gbif_antigone <- xmlParse(file= "data/gbif/antigone_rubicunda/dataset/4fa7b334-ce0d-4e88-aaae-2e0c138d049e.xml")
 #str(gbif_antigone)
@@ -83,5 +83,10 @@ for (i in 1:nrow(species)) {
 test_key = species$key[60][[1]]
 str(test_key)
 
-test_map = map_fetch(taxonKey = test_key)
+# country = "Indonesia",
+test_map2 = map_fetch(taxonKey = 9295466)
+test_map
 plot(test_map)
+plot(test_map2, add = T)
+test_map = map_fetch(taxonKey = 2480498)
+                     
