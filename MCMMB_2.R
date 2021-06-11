@@ -17,8 +17,10 @@ grid <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="all
 
 #grid@proj4string <- CRS("+proj=longlat +ellps=WGS84 +no_defs") # remember to include coordinate system
 
-area <- readOGR("data/nature_reserve_papua/nature_reserve/nature_reserve.shp", integer64="allow.loss")
-nature_reserve <- readOGR("data/gbif/nature_reserve_papua/nature_reserve/nature_reserve.shp", integer64="allow.loss")
+# nature reserve data
+
+nature_reserve <- readOGR("data/nature_reserve_papua/nature_reserve/nature_reserve.shp", integer64="allow.loss")
+papua_borders <- readOGR("data/nature_reserve_papua/papua_borders/IDN_adm1.shp", integer64="allow.loss")
 
 
 str(grid)
@@ -56,6 +58,8 @@ plot(regio)
 plot(first, add=T, col='blue')
 plot(second, add=T, col = "red")
 plot(antigone, add=T, col = "green")
+plot(nature_reserve, add=T, col= "purple")
+plot(papua_borders, add=T, col= "orange")
 
 # how to use gbif with R: https://www.youtube.com/watch?v=RACfDLBIL8A
 
