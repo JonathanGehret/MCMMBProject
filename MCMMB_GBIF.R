@@ -70,8 +70,18 @@ plot(antigone_map)
 
 nrow(species)
 
+# drop Amaurornis moluccanus/Amaurornis moluccana (#33)
+# drop Threskiornis molucca/Threskiornis moluccus (#526)
+species = species[-c(33,526),]
+
 for (i in 1:nrow(species)) {
   print(i)
   print(species$species[i])
   species$key[i] = name_suggest(species$species[i])$data[1]
 }
+
+test_key = species$key[60][[1]]
+str(test_key)
+
+test_map = map_fetch(taxonKey = test_key)
+plot(test_map)

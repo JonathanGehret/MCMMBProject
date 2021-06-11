@@ -15,7 +15,7 @@ setwd("/data")
 # ich würde vorschlagen, den working space zum Ort der Projekt-datei zu setzen und dann
 # immer, wenn data benötigt wird, das entsprechend anzugeben, zb:
 grid <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="allow.loss")
- 
+# grid$SCINAME = Amaurornis moluccana -> Amaurornis moluccanus
 # grid <- readOGR("Birdlife_Papua.shp", integer64="allow.loss")
 
 #grid@proj4string <- CRS("+proj=longlat +ellps=WGS84 +no_defs") # remember to include coordinate system
