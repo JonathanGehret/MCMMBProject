@@ -189,10 +189,23 @@ new_birb$decimalLongitude[1]
 
 #remove missing values
 #na.omit(new_birb,)
-new_birb[!(is.na(new_birb$decimalLatitude) | new_birb$decimalLatitude==""), ]
+new_birb_corrected = new_birb[!(is.na(new_birb$decimalLatitude) | new_birb$decimalLatitude=="" | is.na(new_birb$decimalLongitude) | new_birb$decimalLongitude ==""), ]
 
 # crs 4326 = WGS84
-new_birb_points = st_as_sf(new_birb, coords = c("decimalLongitude","decimalLatitude"), crs = 4326)
+new_birb_points = st_as_sf(new_birb_corrected, coords = c("decimalLongitude","decimalLatitude"), crs = 4326)
+plot(st_geometry(new_birb_points), pch=16, col="navy", add = TRUE)
 
+plot(regio)
 # die gröbsten rausfiltern 
 # jeweils koordinaten nehmen
+
+# ind_birbs
+ind_birbs = read.csv("data/gbif/aves_indonesia/0303155-200613084148143.csv",header = TRUE, sep = "\t")
+ind_birbs = ind_birbs[!(ind_birbs$decimalLatitude=="" | ind_birbs$decimalLongitude==""),]
+
+#crop to indenesian papua
+ ###
+
+# plot
+plot(regio)
+plot(st_geometry(new_birb_points), pch=16, col="navy", add = TRUE)
