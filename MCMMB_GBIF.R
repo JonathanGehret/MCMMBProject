@@ -92,6 +92,12 @@ test_map = map_fetch(taxonKey = 2480498)
 test_3 = map_fetch(taxonKey = 9295466, srs = "EPSG:3857")
 plot(test_3)
 
+test_bb = map_fetch(
+  #taxonKey = c(9273800, 9583117, 9570909, 9377677, 9262418, 9389286),
+  taxonKey = c(9273800), 
+  srs = "EPSG:3857")
+plot(test_bb)
+
 #srs (character) Spatial reference system. One of:
 #  • EPSG:3857 (Web Mercator)
 #• EPSG:4326 (WGS84 plate care?)

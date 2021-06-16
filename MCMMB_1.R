@@ -34,6 +34,7 @@ species <- data.frame(species)
 first <- grid[1,]
 second <- grid[2,]
 antigone <- grid[42,]
+bb = grid[312,]
 
 head(first)
 str(first)
@@ -55,7 +56,7 @@ plot(regio)
 plot(first, add=T, col='blue')
 plot(second, add=T, col = "red")
 plot(antigone, add=T, col = "green")
-
+plot(bb, add = T, col = "pink")
 
 # random forsest
 #import the package
