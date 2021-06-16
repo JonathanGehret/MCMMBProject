@@ -35,6 +35,9 @@ first <- grid[1,]
 second <- grid[2,]
 antigone <- grid[42,]
 bb = grid[312,]
+ast_ni = grid[61,]
+ast_sp = grid[62,]
+mega = grid[284,]
 
 head(first)
 str(first)
@@ -45,7 +48,7 @@ regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allo
 
 str(regio)
 head(regio)
-
+crs(regio)
 
 # plotting
 regio$ADM1_NAME
@@ -57,6 +60,9 @@ plot(first, add=T, col='blue')
 plot(second, add=T, col = "red")
 plot(antigone, add=T, col = "green")
 plot(bb, add = T, col = "pink")
+plot(ast_ni, add = T, col = "yellow")
+plot(ast_sp, add = T, col = "turquoise")
+plot(mega, add = T, col = "orange")
 
 # random forsest
 #import the package
@@ -65,3 +71,8 @@ plot(bb, add = T, col = "pink")
 #rf_classifier = randomForest(Species ~ ., data=training, ntree=100, mtry=2, importance=TRUE)
 #rf_classifier
 # https://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/
+
+for (i in length(species)) {
+  
+}
+  
