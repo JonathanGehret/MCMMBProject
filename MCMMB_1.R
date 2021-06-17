@@ -10,34 +10,33 @@ library(protolite) # needed for rgbif::mvt_fetch
 
 #Daten einlesen
 
-# setwd("/data")
 # working directory = project directory!
 
 # ich würde vorschlagen, den working space zum Ort der Projekt-datei zu setzen und dann
 # immer, wenn data benötigt wird, das entsprechend anzugeben, zb:
-grid <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="allow.loss")
-# grid$SCINAME = Amaurornis moluccana -> Amaurornis moluccanus
-# grid <- readOGR("Birdlife_Papua.shp", integer64="allow.loss")
+birdlife <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="allow.loss")
+# birdlife$SCINAME = Amaurornis moluccana -> Amaurornis moluccanus
+# birdlife <- readOGR("Birdlife_Papua.shp", integer64="allow.loss")
 
-#grid@proj4string <- CRS("+proj=longlat +ellps=WGS84 +no_defs") # remember to include coordinate system
+#birdlife@proj4string <- CRS("+proj=longlat +ellps=WGS84 +no_defs") # remember to include coordinate system
 
-str(grid)
-head(grid)
+str(birdlife)
+head(birdlife)
 
 # Liste aller species:
 
-species <- grid$SCINAME 
+species <- birdlife$SCINAME 
 species <- data.frame(species)
 
 # getting individual species
 
-first <- grid[1,]
-second <- grid[2,]
-antigone <- grid[42,]
-bb = grid[312,]
-ast_ni = grid[61,]
-ast_sp = grid[62,]
-mega = grid[284,]
+first <- birdlife[1,]
+second <- birdlife[2,]
+antigone <- birdlife[42,]
+bb = birdlife[312,]
+ast_ni = birdlife[61,]
+ast_sp = birdlife[62,]
+mega = birdlife[284,]
 
 head(first)
 str(first)

@@ -1,11 +1,12 @@
 # using manually downloaded gbif data
 
 
-library(raster)
-library(rgeos)
+#library(raster)
+#library(rgeos)
 # Load the SimpleFeatures library
-library(sf)
+#library(sf)
 
+# loading libraries, border shapefile, birds
 source("MCMMB_Main.R")
 
 
