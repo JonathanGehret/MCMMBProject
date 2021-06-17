@@ -57,11 +57,23 @@ plot(regio[2,], add = T, col = "blue")
 plot(regio)
 plot(first, add=T, col='blue')
 plot(second, add=T, col = "red")
-plot(antigone, add=T, col = "green")
+plot(antigone, add=T, col = "yellow")
 plot(bb, add = T, col = "pink")
 plot(ast_ni, add = T, col = "yellow")
 plot(ast_sp, add = T, col = "turquoise")
 plot(mega, add = T, col = "orange")
+
+# get row number of species name and plot that species
+#species_name = "Melloria quoyi"
+#species_name = "Dacelo gaudichaud"
+species_name = "Cyclopsitta diophthalma"
+species_name = 
+species_name = 
+species_name = 
+species_name = 
+species_nr = which(species$species == species_name) + 1
+plot(birdlife[species_nr,], add=T, col = "green")
+
 
 # random forsest
 #import the package
@@ -71,7 +83,10 @@ plot(mega, add = T, col = "orange")
 #rf_classifier
 # https://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/
 
-for (i in length(species)) {
-  
+par(mfrow=c(5,5))
+for (i in 1:length(species)) {
+  print(i)
+  #plot(regio)
+  #plot(birdlife[i,], add=T, col = "green")
 }
   
