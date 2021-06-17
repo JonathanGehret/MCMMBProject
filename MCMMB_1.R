@@ -83,10 +83,15 @@ plot(birdlife[species_nr,], add=T, col = "green")
 #rf_classifier
 # https://www.blopig.com/blog/2017/04/a-very-basic-introduction-to-random-forests-using-r/
 
-par(mfrow=c(5,5))
-for (i in 1:length(species)) {
-  print(i)
-  #plot(regio)
-  #plot(birdlife[i,], add=T, col = "green")
+par(mfrow=c(4,4))
+for (i in 1:length(species$species)) {
+#for (i in 1:16) {
+  #print(i)
+  plot(regio, main = paste(birdlife[i,]$SCINAME, i))
+  plot(birdlife[i,], add=T, col = "green")
 }
-  
+
+#par(mfrow=c(1,1))
+#plot(regio, main="test")
+
+png("range_maps/asdf.png")
