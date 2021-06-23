@@ -3,6 +3,7 @@
 
 library(rgdal)
 library(raster)
+library(rgeos)
 
 
 #Daten einlesen
@@ -91,18 +92,45 @@ plot(regio_popul)
 
 
 #Primary-forest
-primforest <- raster("data/Indicator/Primary_Forest/Asia_2001_primary.tif") 
-plot(primforest)
+#primforest <- raster("data/Indicator/Primary_Forest/Asia_2001_primary.tif") 
+#plot(primforest)
 
 
-regio_primforest <- intersect(primforest, regio)
-plot(regio_primforest)
+#regio_primforest <- intersect(primforest, regio)
+#plot(regio_primforest)
 
-writeRaster(regio_primforest, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/Primary_Forest/regio_primforest"), format="GTiff", overwrite=TRUE)
+#writeRaster(regio_primforest, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/Primary_Forest/regio_primforest"), format="GTiff", overwrite=TRUE)
 regio_primforest <- raster("data/Indicator/Primary_Forest/regio_primforest.tif")
 plot(regio_primforest)
 
 
+
+#Ecoregion
+
+library("sf")
+ecoregion <- readOGR("data/Indicator/Ecoregion/Ecoregions2017.shp", integer64="allow.loss")
+regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allow.loss")
+
+ecoregion_b <- gBuffer(ecoregion, byid=TRUE, width=0)
+regio_b <- gBuffer(regio, byid=TRUE, width=0)
+plot(ecoregion_b) 
+
+
+st_crop(ecoregion_b, regio_b)
+
+
+#Landcover
+
+landcover <- raster("data/Indicator/landcover/IDN_msk_cov.grd")  #ob das passt
+plot(landcover)   
+
+
+regio_landcover <- intersect(landcover, regio)
+plot(regio_landcover)
+
+writeRaster(regio_landcover, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/landcover/regio_landcover"), format="GTiff", overwrite=TRUE)
+regio_landcover <- raster("data/Indicator/landcover/regio_landcover")
+plot(regio_landcover)
 
 
 # plotting
