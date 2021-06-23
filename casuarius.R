@@ -12,6 +12,7 @@ cas_una_iucn = birdlife[79,]
 # plot casuaries
 plot(regio)
 plot(cas_ben_iucn, add = T, col = "red")
+# legend(xlegend= "Red: Bennet")
 #plot(regio)
 plot(cas_cas_iucn, add = T, col = "yellow")
 #plot(regio)
@@ -36,6 +37,9 @@ ind_birbs_points = st_as_sf(ind_birbs_corrected, coords = c("decimalLongitude","
 # (could also just use species names instead, may be more clear)
 
 cas_ben_species = species[77,]$species
+cas_cas_species = species[78,]$species
+cas_una_species = species[79,]$species
+
 cas_ben_ID = species[77,]$key[1][[1]]
 cas_cas_ID = species[78,]$key[[1]]
 cas_una_ID = species[79,]$key[[1]]
@@ -47,16 +51,11 @@ cas_una_gbif = ind_birbs_points[ind_birbs_points$gbifID == cas_una_ID,]
 
 
 cas_ben_gbif = ind_birbs_points[ind_birbs_points$species == cas_ben_species,]
+cas_cas_gbif = ind_birbs_points[ind_birbs_points$species == cas_cas_species,]
+cas_una_gbif = ind_birbs_points[ind_birbs_points$species == cas_una_species,]
+
 
 # plot
 plot(st_geometry(cas_ben_gbif), pch=16, col="green", add = TRUE)
 plot(st_geometry(cas_cas_gbif), pch=16, col="purple", add = TRUE)
-plot(st_geometry(cas_una_gbif), pch=16, col="navy", add = TRUE)
-
-
-cas_ben = read.csv2("data/gbif/acanthiza_murina/0303128-200613084148143.csv", header = TRUE, sep = "\t")
-cas_cas = read.csv2("data/gbif/acanthiza_murina/0303128-200613084148143.csv", header = TRUE, sep = "\t")
-cas_una = read.csv2("data/gbif/acanthiza_murina/0303128-200613084148143.csv", header = TRUE, sep = "\t")
-
-
-
+plot(st_geometry(cas_una_gbif), pch=16, col="orange", add = TRUE)
