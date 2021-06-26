@@ -40,14 +40,14 @@ cas_ben_species = species[77,]$species
 cas_cas_species = species[78,]$species
 cas_una_species = species[79,]$species
 
-cas_ben_ID = species[77,]$key[1][[1]]
-cas_cas_ID = species[78,]$key[[1]]
-cas_una_ID = species[79,]$key[[1]]
+#cas_ben_ID = species[77,]$key[1][[1]]
+#cas_cas_ID = species[78,]$key[[1]]
+#cas_una_ID = species[79,]$key[[1]]
 
 # get points form gbif ID
-cas_ben_gbif = ind_birbs_points[ind_birbs_points$gbifID == cas_ben_ID,]
-cas_cas_gbif = ind_birbs_points[ind_birbs_points$gbifID == cas_cas_ID,]
-cas_una_gbif = ind_birbs_points[ind_birbs_points$gbifID == cas_una_ID,]
+#cas_ben_gbif = ind_birbs_points[ind_birbs_points$gbifID == cas_ben_ID,]
+#cas_cas_gbif = ind_birbs_points[ind_birbs_points$gbifID == cas_cas_ID,]
+#cas_una_gbif = ind_birbs_points[ind_birbs_points$gbifID == cas_una_ID,]
 
 
 cas_ben_gbif = ind_birbs_points[ind_birbs_points$species == cas_ben_species,]
@@ -59,3 +59,6 @@ cas_una_gbif = ind_birbs_points[ind_birbs_points$species == cas_una_species,]
 plot(st_geometry(cas_ben_gbif), pch=16, col="green", add = TRUE)
 plot(st_geometry(cas_cas_gbif), pch=16, col="purple", add = TRUE)
 plot(st_geometry(cas_una_gbif), pch=16, col="orange", add = TRUE)
+
+legend("bottomleft", legend = c("Casuarius unappendiculatus","Casuarius bennetti","Casuarius casuarius"), 
+       fill = c("black","red","yellow"))

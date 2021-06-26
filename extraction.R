@@ -1,5 +1,8 @@
 # get point file, examplary cas_ben_gbif, cas_cas_gbif, cas_cas_gbif from casuarius.R
 
+# loading libraries, border shapefile, birds
+source("MCMMB_Main.R")
+
 # get raster files, either from other script or read in here:
 elevation = raster("data/Indicator/elevation/regio_elev.tif")
 precipitation = raster("data/Indicator/Precipitation/regio_precip.tif")
