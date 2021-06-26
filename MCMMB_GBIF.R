@@ -1,4 +1,12 @@
+# this file is obsolote right now as we didn't get rgbif to work as required due to 
+# recent changes to gbif API; 
+
+# for gbif access use manually downloaded file: 
+# gbif_birds_indonesia = read.csv("data/gbif/aves_indonesia/0303155-200613084148143.csv",header = TRUE, sep = "\t")
+
+
 # using rgbif (disfuncitonal rn)
+
 
 # how to use gbif with R: https://www.youtube.com/watch?v=RACfDLBIL8A
 
