@@ -2,6 +2,7 @@
 
 #install.packages("rgbif")
 #install.packages("protolite")
+install.packages("biomod2")
 library(rgdal)
 library(raster)
 library(rgbif) # api access for gbif

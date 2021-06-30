@@ -6,7 +6,7 @@ source("MCMMB_Main.R")
 # get raster files, either from other script or read in here:
 elevation = raster("data/Indicator/elevation/regio_elev.tif")
 precipitation = raster("data/Indicator/Precipitation/regio_precip.tif")
-temperature = raster("data/Indicator/Temperatur/regio_temp.tif") / 10
+temperature = raster("data/Indicator/Temperatur/regio_temp.tif") / 10 # remove / 10 once its done
 primary_forest = raster("data/Indicator/Primary_Forest/regio_primforest.tif")
 population = raster("data/Indicator/population/regio_popul.tif")
 land_reserve <- readOGR("data/Indicator/nature_reserve_papua/land_reserv/land_reserv.shp", integer64="allow.loss")
