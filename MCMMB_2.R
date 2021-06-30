@@ -42,7 +42,11 @@ plot(regio_elev)
 
 #writeRaster(regio_temp, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/Temperatur/regio_temp"), format="GTiff", overwrite=TRUE)
 regio_temp <- raster("data/Indicator/Temperatur/regio_temp.tif")
-plot(regio_temp)
+regio_temperature = raster("data/Indicator/Temperatur/regio_temp.tif") / 10
+writeRaster(regio_temperature, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/Temperatur/regio_temperature"), format="GTiff", overwrite=TRUE)
+
+
+plot(regio_temperature)
 
 
 #Precipitation
@@ -121,15 +125,16 @@ st_crop(ecoregion_b, regio_b)
 
 #Landcover
 
-landcover <- raster("data/Indicator/landcover/IDN_msk_cov.grd")  #ob das passt
-plot(landcover)   
+#landcover <- raster("data/Indicator/landcover/IDN_msk_cov.grd")  #ob das passt
+#plot(landcover)   
 
 
-regio_landcover <- intersect(landcover, regio)
-plot(regio_landcover)
+#regio_landcover <- intersect(landcover, regio)
+#plot(regio_landcover)
 
-writeRaster(regio_landcover, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/landcover/regio_landcover"), format="GTiff", overwrite=TRUE)
-regio_landcover <- raster("data/Indicator/landcover/regio_landcover")
+
+#writeRaster(regio_landcover, filename=file.path("data/Indicator/landcover/regio_landcover"), format="GTiff", overwrite=TRUE)
+regio_landcover <- raster("data/Indicator/landcover/regio_landcover.tif")
 plot(regio_landcover)
 
 
