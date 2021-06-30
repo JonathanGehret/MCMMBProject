@@ -1,5 +1,7 @@
-# using manually downloaded gbif data
+# testing use of manually downloaded gbif data:
 
+# for gbif access use manually downloaded file: 
+# gbif_birds_indonesia = read.csv("data/gbif/aves_indonesia/0303155-200613084148143.csv",header = TRUE, sep = "\t")
 
 #library(raster)
 #library(rgeos)

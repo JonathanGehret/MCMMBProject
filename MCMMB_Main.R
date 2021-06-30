@@ -2,6 +2,7 @@
 
 #install.packages("rgbif")
 #install.packages("protolite")
+install.packages("biomod2")
 library(rgdal)
 library(raster)
 library(rgbif) # api access for gbif
@@ -24,8 +25,10 @@ species <- birdlife$SCINAME
 species <- data.frame(species)
 
 # drop Amaurornis moluccanus/Amaurornis moluccana (#33)
-# drop Threskiornis molucca/Threskiornis moluccus (#526)
-species = species[-c(33,527),]
+# drop Threskiornis molucca/Threskiornis moluccus (#527) # are these numbers correct?
+#species = species[-c(33,527),] # better: instead of deleting, replace with respective names
+species[33,] = "Amaurornis moluccanus"
+species[527,] = "Threskiornis molucca"
 species = data.frame(species)
 
 for (i in 1:nrow(species)) {
