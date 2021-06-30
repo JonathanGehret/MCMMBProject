@@ -6,6 +6,12 @@ library(raster)
 library(rgeos)
 
 
+Tif-daten zuschneiden:
+-population
+-natur-reserve
+-primary-forest
+
+
 #Daten einlesen
 
 # birdlife --> shows the distriution of all spotted birds in papua
@@ -41,10 +47,10 @@ plot(regio_elev)
 #plot(regio_temp)
 
 #writeRaster(regio_temp, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/Temperatur/regio_temp"), format="GTiff", overwrite=TRUE)
-regio_temp <- raster("data/Indicator/Temperatur/regio_temp.tif")
-regio_temperature = raster("data/Indicator/Temperatur/regio_temp.tif") / 10
-writeRaster(regio_temperature, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/Temperatur/regio_temperature"), format="GTiff", overwrite=TRUE)
-
+#regio_temp <- raster("data/Indicator/Temperatur/regio_temp.tif")
+#regio_temperature = raster("data/Indicator/Temperatur/regio_temp.tif") / 10
+#writeRaster(regio_temperature, filename=file.path("C:/Users/Paul/Desktop/3_Semester/modern concepts and methods in macroecology and biogeography/Projekt/MCMMBProject/data/Indicator/Temperatur/regio_temperature"), format="GTiff", overwrite=TRUE)
+regio_temperature = raster("data/Indicator/Temperatur/regio_temp.tif")
 
 plot(regio_temperature)
 
@@ -72,7 +78,7 @@ plot(regio_precip)
 
 #land-reserv
 land_reserv <- readOGR("data/Indicator/nature_reserve_papua/land_reserv/land_reserv.shp", integer64="allow.loss")
-
+plot(land_reserv)
 
 # reading in island borders
 
@@ -108,32 +114,20 @@ regio_primforest <- raster("data/Indicator/Primary_Forest/regio_primforest.tif")
 plot(regio_primforest)
 
 
-
-#Ecoregion
-
-library("sf")
-ecoregion <- readOGR("data/Indicator/Ecoregion/Ecoregions2017.shp", integer64="allow.loss")
-regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allow.loss")
-
-ecoregion_b <- gBuffer(ecoregion, byid=TRUE, width=0)
-regio_b <- gBuffer(regio, byid=TRUE, width=0)
-plot(ecoregion_b) 
-
-
-st_crop(ecoregion_b, regio_b)
-
-
 #Landcover
 
-#landcover <- raster("data/Indicator/landcover/IDN_msk_cov.grd")  #ob das passt
-#plot(landcover)   
+landcover <- raster("data/Indicator/landcover/IDN_msk_cov.grd")  #ob das passt
+plot(landcover)   
+
+regio_precip <- raster("data/Indicator/Precipitation/regio_precip.tif")
+plot(regio_precip)
 
 
-#regio_landcover <- intersect(landcover, regio)
-#plot(regio_landcover)
+regio_landcover <- crop(landcover, regio_precip)
+plot(regio_landcover)
 
 
-#writeRaster(regio_landcover, filename=file.path("data/Indicator/landcover/regio_landcover"), format="GTiff", overwrite=TRUE)
+writeRaster(regio_landcover, filename=file.path("data/Indicator/landcover/regio_landcover"), format="GTiff", overwrite=TRUE)
 regio_landcover <- raster("data/Indicator/landcover/regio_landcover.tif")
 plot(regio_landcover)
 
