@@ -25,7 +25,7 @@ ind_birbs = read.csv("data/gbif/aves_indonesia/0303155-200613084148143.csv",head
 ind_birbs_corrected = ind_birbs[!(is.na(ind_birbs$decimalLatitude) | ind_birbs$decimalLatitude=="" | is.na(ind_birbs$decimalLongitude) | ind_birbs$decimalLongitude==""),]
 
 # create points by use of Long and Lat
-ind_birbs_points = st_as_sf(ind_birbs_corrected, coords = c("decimalLongitude","decimalLatitude"), crs = 4326)
+ind_birbs_points = st_as_sf(ind_birbs_corrected, coords = c("decimalLongitude","decimalLatitude"), crs = 4326) # crs = coordinate system, which is the same as the iucn one (which one??)
 
 #crop to indonesian papua
 ###
