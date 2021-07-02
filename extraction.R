@@ -48,7 +48,7 @@ cas_una_pop = extract(population, cas_una_gbif)
 
 
 
-# add loop for any birdies
+# add loop for extraction for any birdies
 birdie_point_input_list = c("cas_ben_gbif", "cas_cas_gbif", "cas_cas_gbif")
 indicator_frame = data.frame()
 #names(indicator_frame) = c("species","elevation","precipitation", "temperature","primary_forest","population","land_reserve")

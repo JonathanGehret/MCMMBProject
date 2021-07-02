@@ -8,6 +8,27 @@ source("MCMMB_Main.R") # libaries and IUCN data read-in
 cas_ben_iucn = birdlife[77,]
 cas_cas_iucn = birdlife[78,]
 cas_una_iucn = birdlife[79,]
+cas_ben_iucn$SCINAME
+
+which(birdlife$SCINAME == "Casuarius bennetti")
+
+# getting and plotting birdlife data in loop using index gbif keys:
+bird_numbers = c(77,78,79)
+iucn_list = list()
+for (i in bird_numbers) {
+  bird = birdlife[i,]
+  bird_name = bird$SCINAME
+  iucn_list[[bird_name]] = bird
+}
+
+# getting and plotting iucn birdlife birds in loop using scientific names vector:
+bird_names = c(cas_ben_species,cas_cas_species,cas_una_species)
+iucn_list_2 = list()
+for (i in bird_names) {
+  bird = birdlife[which(birdlife$SCINAME == i),]
+  plot(bird, add = T, col = "red")
+  iucn_list_2[[i]] = bird
+}
 
 # plot casuaries
 plot(regio)
@@ -39,7 +60,6 @@ ind_birbs_points = st_as_sf(ind_birbs_corrected, coords = c("decimalLongitude","
 cas_ben_species = species[77,]$species
 cas_cas_species = species[78,]$species
 cas_una_species = species[79,]$species
-
 #cas_ben_ID = species[77,]$key[1][[1]]
 #cas_cas_ID = species[78,]$key[[1]]
 #cas_una_ID = species[79,]$key[[1]]
@@ -54,6 +74,26 @@ cas_ben_gbif = ind_birbs_points[ind_birbs_points$species == cas_ben_species,]
 cas_cas_gbif = ind_birbs_points[ind_birbs_points$species == cas_cas_species,]
 cas_una_gbif = ind_birbs_points[ind_birbs_points$species == cas_una_species,]
 
+
+# loop for getting gibf data for any scientific bird names ("Genus species") in vector
+
+# creating species vector with all the species
+bird_names = c(cas_ben_species,cas_cas_species,cas_una_species)
+# add different colors per species?
+
+gbif_birds = list() # creaty emtpy list
+
+for (i in bird_names) {
+    gbif_birds[[i]] = ind_birbs_points[ind_birbs_points$species == i,]
+    plot(st_geometry(gbif_birds[[i]]), pch=16, col="green", add = TRUE) 
+}
+
+# alternative plotting without naming:
+# l = length(bird_names) # length of vector =  number of birds
+#gbif_birds = vector("list", l) # creating empty list of length l 
+#for (i in 1:l) {
+#gbif_birds[[i]] = ind_birbs_points[ind_birbs_points$species == bird_names[i],]
+#}
 
 # plot
 plot(st_geometry(cas_ben_gbif), pch=16, col="green", add = TRUE)

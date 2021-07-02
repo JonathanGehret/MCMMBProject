@@ -45,3 +45,14 @@ regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allo
 # plotting
 
 plot(regio)
+
+
+# all birbs indonesia gbif (compare scipt MCMMB_GBIF_02.R)
+# ind_birbs
+ind_birbs = read.csv("data/gbif/aves_indonesia/0303155-200613084148143.csv",header = TRUE, sep = "\t")
+ind_birbs_corrected = ind_birbs[!(is.na(ind_birbs$decimalLatitude) | ind_birbs$decimalLatitude=="" | is.na(ind_birbs$decimalLongitude) | ind_birbs$decimalLongitude==""),]
+
+# create points
+ind_birbs_points = st_as_sf(ind_birbs_corrected, coords = c("decimalLongitude","decimalLatitude"), crs = 4326)
+
+#crop to indonesian papua
