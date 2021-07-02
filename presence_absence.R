@@ -47,9 +47,19 @@ grat <- graticule(lons, lats, proj = prj, xlim = xl, ylim = yl)
 #plot(regio)
 #plot(grat, add =T)
 cropped_grid= crop(grat,regio)
+#cropped_grid= crop(grat,precipitation)
 plot(cropped_grid, add = T)
+plot(precipitation)
 
 #saving the grid
 shapefile(cropped_grid,"data/grid/grid_papua.shp")
 test_grid_2 = readOGR("data/grid/grid_papua.shp")
 plot(test_grid_2)
+
+grid = cropped_grid
+
+# add orrurence data to grid!! for plotting
+grid@data
+
+plot(grid, col=ifelse(grid@data$Geonoma.pauciflora==1,"#ef8a62","#7fbf7b"), border=FALSE, main = "Geonoma pauciflora")
+

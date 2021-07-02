@@ -6,6 +6,8 @@
 
 # dont forget to divide temperature by ten
 # so far only temperature and precip, others have "differnet extent"
+# grid@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
+
 tif_predictors <- stack(list.files(path = "data/indicator_stack/",
                                 full.names = TRUE,
                                 pattern = ".tif"))
@@ -45,3 +47,18 @@ biomod2_cas_una_formated <- BIOMOD_FormatingData(resp.var = test_sp[,1],
                                      #PA.nb.absences = 0,
                                      resp.name = "Casuarius.unappendiculatus")
 biomod2_cas_una_formated
+
+format_bm = biomod2_cas_una_formated
+
+
+# shows biomod modelling possibilities:
+BIOMOD_ModelingOptions() 
+
+
+biomodels_1 <- BIOMOD_Modeling(data = format_bm,
+                            models = c('GLM','GAM','ANN','RF'),
+                            SaveObj = TRUE,
+                            # models.options = myBiomodOptions,
+                            # DataSplit = 80, # common practice to validate!
+                            VarImport = 1)
+PIPO.mod
