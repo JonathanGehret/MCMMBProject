@@ -172,7 +172,10 @@ nature_reserve_project
 papua_borders_project
 
 
+grid_papua <- readOGR("data/grid/grid_papua.shp", integer64="allow.loss")
+grid_papua
 
 
 
-
+fr <- rasterize(grid_papua, regio_precip)
+lr <- mask(x=land_reserv_project, mask=fr)
