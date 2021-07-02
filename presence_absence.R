@@ -44,7 +44,7 @@ xl <-  range(lons) + c(-0.4, 0.4)
 yl <- range(lats) + c(-0.4, 0.4)
 ## build the lines with our precise locations and ranges
 grat <- graticule(lons, lats, proj = prj, xlim = xl, ylim = yl)
-#plot(regio)
+plot(regio)
 #plot(grat, add =T)
 cropped_grid= crop(grat,regio)
 #cropped_grid= crop(grat,precipitation)
@@ -56,10 +56,73 @@ shapefile(cropped_grid,"data/grid/grid_papua.shp")
 test_grid_2 = readOGR("data/grid/grid_papua.shp")
 plot(test_grid_2)
 
+plot(grid)
 grid = cropped_grid
 
 # add orrurence data to grid!! for plotting
 grid@data
 
+#Make spatial points dataframe from grid (from practical 3)
+
+# transfrom grid  
+
+grid@lines
+
+
+plot(grid@lines[[5]]@Lines)
+
+grid_2 = grid
+grid_2@lines = coord_list
+coords_grid = coordinates(grid)
+
+coords_grid[[3]]
+
+l = length(coords_grid)
+c
+
+paste("abd","def")
+
+coord_list = list()
+for (i in 1:l) {
+  a = coords_grid[[i]]
+  for (j in 1:length(a)) {
+    name = paste(i,j)
+    coord_list[[name]] = a[[j]]
+    #print(a[j])
+    }
+}
+
+coords_grid[[3]][[4]]
+
+c = 0
+for (i in 1:l) {
+  a = coords_grid[[i]]
+  print(a)
+  c = c+ 1
+}
+
+
+grid_2
+for (i in vector) {
+  
+}
+
+grid_centroids <- gCentroid(grid_2, byid= T)
+#grid_centroids <- gCentroid(coordinates(grid))
+grid_centroids <- SpatialPointsDataFrame(grid_centroids, data = data.frame(grid_centroids@coords, present = 0))
+names(grid_centroids@data) <- c("longitude","latitude","present")
+par(mfrow=c(1,1))
+plot(grid_centroids)
+
+grid$ID
+
+
+r_list = range(length(coord_list))
+
+### 
+
 plot(grid, col=ifelse(grid@data$Geonoma.pauciflora==1,"#ef8a62","#7fbf7b"), border=FALSE, main = "Geonoma pauciflora")
 
+
+centroids <- project(coordinates(grid), inv = TRUE)
+coordinates(grid)
