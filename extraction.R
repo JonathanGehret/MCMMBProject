@@ -10,7 +10,11 @@ temperature = raster("data/Indicator/Temperatur/regio_temp.tif") / 10 # remove /
 primary_forest = raster("data/Indicator/Primary_Forest/regio_primforest.tif")
 population = raster("data/Indicator/population/regio_popul.tif")
 land_reserve <- readOGR("data/Indicator/nature_reserve_papua/land_reserv/land_reserv.shp", integer64="allow.loss")
+landcover = raster("data/Indicator/landcover/regio_landcover.tif")
 
+#landcover@crs = CRS("+proj=longlat +ellps=WGS84 +no_defs")
+#landcover@crs
+#primary_forest@crs
 
 #cas_una_gbif
 
