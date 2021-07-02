@@ -11,21 +11,37 @@ tif_predictors <- stack(list.files(path = "data/indicator_stack/",
                                 pattern = ".tif"))
 plot(tif_predictors)
 
-#manula extraction
-testing_sextract = extract(tif_predictors,cas_una_gbif)
+#manual extraction
+testing_extract = extract(tif_predictors,cas_una_gbif)
 
-cas_una_gbif$individualCount
+cas_una_gbif$occurrenceStatus
 
 cas_una_gbif_sp = as(cas_una_gbif, Class = "Spatial")
 class(cas_una_gbif_sp)
 
+test_gbif = gbif_birds[[3]]
+spatial_points_test = SpatialPoints()
+
+test_sp = as(test_gbif, Class = "Spatial")
+class(test_sp)
+test_gbif$geometry
+
+class(test_sp[,1])
+
+test_sp_2 <- as.numeric(test_sp[,1])
+
+# use other birds as pseudo absence data????°!!
+# > No pseudo absences selection ! ->î
+# ! No data has been set aside for modeling evaluation -> needed?
+
+
 # putting the data into right format
 # prefers binary presence/absence data, does it also work with our gbif data?
-biomod2_cas_una_formated <- BIOMOD_FormatingData(resp.var = cas_una_gbif_sp,
+biomod2_cas_una_formated <- BIOMOD_FormatingData(resp.var = test_sp[,1],
                                      expl.var = stack(tif_predictors),
                                      #eval.resp.var = ,
                                      #PA.strategy = "random",
                                      #PA.nb.rep = 0, # common practice to resample!
                                      #PA.nb.absences = 0,
                                      resp.name = "Casuarius.unappendiculatus")
-PIPO.mod.dat
+biomod2_cas_una_formated

@@ -21,7 +21,7 @@ library(spatialEco)
 birdlife <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="allow.loss")
 
 
-# Liste aller species:
+# iucn birdlife species names dataframe:
 species <- birdlife$SCINAME 
 species <- data.frame(species)
 
@@ -32,6 +32,7 @@ species[33,] = "Amaurornis moluccanus"
 species[527,] = "Threskiornis molucca"
 species = data.frame(species)
 
+# adding keys to species dataframe (obsoloete now?)
 for (i in 1:nrow(species)) {
   print(i)
   print(species$species[i])

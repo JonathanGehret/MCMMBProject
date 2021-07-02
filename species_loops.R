@@ -1,4 +1,5 @@
 # Loops to access iucn birdlife and gbif data by bird_names
+# could even combine booth loops into one!
 
 # use MCMMB_main for libraries and data
 source("MCMMB_Main.R")
