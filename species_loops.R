@@ -47,3 +47,13 @@ for (i in 1:length(species$species)) {
   plot(regio, main = paste(birdlife[i,]$SCINAME, i))
   plot(birdlife[i,], add=T, col = "green")
 }
+
+#4. plot all gbif species
+par(mfrow=c(3,3))
+bird_names = species$species
+gbif_birds = list() # creaty emtpy list
+for (i in bird_names) {
+  gbif_birds[[i]] = ind_birbs_points[ind_birbs_points$species == i,]
+  plot(regio, main = i)
+  plot(st_geometry(gbif_birds[[i]]), pch=16, col="green", add = TRUE) 
+}
