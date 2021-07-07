@@ -177,5 +177,5 @@ grid_papua
 
 
 
-fr <- rasterize(grid_papua, regio_precip)
-lr <- mask(x=land_reserv_project, mask=fr)
+#fr <- rasterize(grid_papua, regio_precip)
+#lr <- mask(x=land_reserv_project, mask=fr)
