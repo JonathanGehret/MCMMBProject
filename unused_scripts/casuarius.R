@@ -95,6 +95,7 @@ for (i in bird_names) {
 #gbif_birds[[i]] = ind_birbs_points[ind_birbs_points$species == bird_names[i],]
 #}
 
+plot(regio)
 # plot
 plot(st_geometry(cas_ben_gbif), pch=16, col="green", add = TRUE)
 plot(st_geometry(cas_cas_gbif), pch=16, col="purple", add = TRUE)
@@ -102,3 +103,8 @@ plot(st_geometry(cas_una_gbif), pch=16, col="orange", add = TRUE)
 
 legend("bottomleft", legend = c("Casuarius unappendiculatus","Casuarius bennetti","Casuarius casuarius"), 
        fill = c("black","red","yellow"))
+
+
+
+test_species = species[300,]$species
+test_species_gbif = ind_birbs_points[ind_birbs_points$species == test_species,]

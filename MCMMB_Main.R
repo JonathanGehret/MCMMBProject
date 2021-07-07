@@ -9,7 +9,6 @@ library(raster)
 library(rgbif) # api access for gbif
 #library(maptools)
 library(protolite) # needed for rgbif::mvt_fetch 
-library(raster)
 library(rgeos)
 # Load the SimpleFeatures library
 library(sf)
