@@ -18,11 +18,39 @@ library(rgeos)
 
 nature_reserve_project <- readOGR("data/Indicator/nature_reserve_papua/nature_reserve/nature_reserve.shp", integer64="allow.loss")
 nature_reserve_project@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
+plot(nature_reserve_project)
+plot(regio)
+
+a = regio_elev
+a[a >0] = 0
+plot(a)
+
+
+       
+nature_reserve_project_raster <- rasterize(nature_reserve_project, regio_precip,1)
+
+plot(regio)
+regio
+plot(nature_reserve_project_raster)
+nature_reserve_raster <- mask(nature_reserve_project_raster, a)
+
+plot(nature_reserve_raster)
+
+
+writeRaster(nature_reserve_raster, filename=file.path("data/Indicator/nature_reserve_papua/nature_reserve/nature_project"), format="GTiff", overwrite=TRUE)
+
 
 #Papua borders
 
 papua_borders_project <- readOGR("data/Indicator/nature_reserve_papua/papua_borders/IDN_adm1.shp", integer64="allow.loss")
 papua_borders_project@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
+
+papua_borders_project_raster <- rasterize(papua_borders_project, regio_precip,1)
+plot(papua_borders_project_raster)
+
+
+writeRaster(papua_borders_project_raster, filename=file.path("data/Indicator/nature_reserve_papua/papua_borders/papua_borders_project_raster"), format="GTiff", overwrite=TRUE)
+
 
 #elevation map
 #elev <- raster("data/Indicator/elevation/mn30_grd")
@@ -76,10 +104,22 @@ plot(regio_precip)
 land_reserv_project <- readOGR("data/Indicator/nature_reserve_papua/land_reserv/land_reserv.shp", integer64="allow.loss")
 
 land_reserv_project@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
+
+land_reserv_project_raster <- rasterize(land_reserv_project, regio_precip,1)
+plot(land_reserv_project_raster)
+
+
+writeRaster(land_reserv_project_raster, filename=file.path("data/Indicator/nature_reserve_papua/land_reserv/land_reserv_project"), format="GTiff", overwrite=TRUE)
+
+
+
+
+
 # reading in island borders
 
 regio_project <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allow.loss")
 regio_project@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
+
 
 #Population-density
 #popul <- raster("data/Indicator/population/idn_msk_pop.grd") 
