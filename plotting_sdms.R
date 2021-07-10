@@ -3,6 +3,9 @@
 # comparing plots 
 # to-do: loop over layers
 
+# loading model
+#biomod_proj = BIOMOD_LoadModels(bm.out = "Test.Spec/Test.Spec.1625930744.models.out")
+
 # compare gbif with elevation
 
 par(mfrow=c(2,3))
@@ -10,7 +13,7 @@ par(mfrow=c(2,3))
 bio = biomod_proj@proj@val@layers
 
 for (i in bio) {
-plot(elevation)
+plot(elevation, fill = FALSE)
 plot(i, add = T, col =  rgb(red = 0.5, green = 0.5, blue = 0.5, alpha = 0.5))
 
 }

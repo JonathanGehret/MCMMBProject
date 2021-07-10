@@ -47,13 +47,12 @@ for (i in gbif_birds) {
     centroids_all = SpatialPointsDataFrame(coords = data.frame(centroids_all), data = data.frame(centroids_all))
     centroids_all@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
     
+    # create absence data
     set.seed(100)
     cas_una_abs <- rbind(centroids_all[sample(nrow(centroids_all),nrow(centroids_occ), replace = TRUE),],
                          centroids_occ)
-    
-    test_spec_abs = rbind(centroids_all[sample(nrow(centroids_all),nrow(centroids_occ), replace = TRUE),],
-                          centroids_occ)
-    
+
+    presence_absence_list$bird = []
   
   }
   #cas_una_abs[[1]]
