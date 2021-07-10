@@ -13,7 +13,7 @@ tif_predictors <- stack(list.files(path = "data/indicator_stack/",
                                 pattern = ".tif"))
 plot(tif_predictors)
 
-manual extraction
+#manual extraction
 #testing_extract = extract(tif_predictors,cas_una_gbif)
 
 #cas_una_gbif$occurrenceStatus
@@ -32,7 +32,7 @@ manual extraction
 
 #test_sp_2 <- as.numeric(test_sp[,1])
 
-cas_una_xy = data.frame(cbind(cas_una_abs$x, cas_una_abs$y))
+#cas_una_xy = data.frame(cbind(cas_una_abs$x, cas_una_abs$y))
 test_spec_xy = data.frame(cbind(test_spec_abs$x, test_spec_abs$y))
 # use other birds as pseudo absence data????°!!
 # > No pseudo absences selection ! ->î
@@ -66,7 +66,8 @@ train models. Further reading: e.g., Guillera-Arroita et al. 2015, Kramer-Schadt
 2013."
 
 biomodels_1 <- BIOMOD_Modeling(data = format_bm,
-                            models = c('GLM','GAM','ANN','RF'),
+                            #models = c('GLM','GAM','ANN','RF'),
+                            models = c('GLM','ANN','RF'),
                             SaveObj = TRUE,
                             # models.options = myBiomodOptions,
                             # DataSplit = 80, # common practice to validate!
@@ -93,7 +94,9 @@ barplot(height = t(biomod_var_importance),
         beside = T,
         horiz = T,
         xlab = "Variable Importance",
-        legend = c("GLM", "GAM", "ANN", "RF"))
+        #legend = c("GLM", "GAM", "ANN", "RF"))
+        legend = c("GLM", "ANN", "RF"))
+
 
 "
 One approach for using the information in these various models is to combine them into an ensemble, or
@@ -136,3 +139,4 @@ biomod_proj = BIOMOD_Projection(modeling.output = biomodels_1,
                                 output.format = '.grd' )
 
 plot(biomod_proj)
+#plot(elevation)

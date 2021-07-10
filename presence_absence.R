@@ -1,6 +1,14 @@
 
 #4. use established raster
 source("MCMMB_Main.R")
+"test_function = function(bird_list) {
+
+# to-do: loop all steps for any given species list
+for (i in gbif_birds) {
+  create presence-absence
+    
+}
+}"
 
 #plot(regio)
 
@@ -17,7 +25,7 @@ centroids_all = xyFromCell(elevation_mask, which(elevation_mask[]>=0))
 # 2nd raster
 # cas_una_gbif is st -> sp with as_Spatial
 
-cas_una_gbif = test_species_gbif
+cas_una_gbif = gbif_birds[[1]]
 #plot(regio)
 species_raster = rasterize(as_Spatial(cas_una_gbif),elevation,1)
 raster_mask = mask(elevation,species_raster)
@@ -50,4 +58,5 @@ test_spec_abs = rbind(centroids_all[sample(nrow(centroids_all),nrow(centroids_oc
 plot(regio)
 # names?? cas_una_pres_abs, cas_una, cas_una_pres, cas_una_occ, cas_una_p_a
 plot(cas_una_abs, add = T, col = ifelse(cas_una_abs$present == 1, "red","green"))
+plot(regio)
 plot(test_spec_abs, add = T, col = ifelse(test_spec_abs$present == 1, "red","green"))

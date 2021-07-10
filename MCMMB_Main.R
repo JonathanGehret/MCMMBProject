@@ -1,8 +1,5 @@
 #package libraries
 
-#install.packages("rgbif")
-#install.packages("protolite")
-#install.packages("biomod2")
 library(biomod2)
 library(rgdal)
 library(raster)
@@ -14,7 +11,8 @@ library(rgeos)
 library(sf)
 # for intersectiong with point.in.poly
 library(spatialEco)
-
+# for removing speicies with n < threshold 
+library(dplyr)
 
 # loading of IUCN birdlife data
 birdlife <- readOGR("data/Papua_Birdlife_project/Birdlife_Papua.shp", integer64="allow.loss")
@@ -31,12 +29,12 @@ species[33,] = "Amaurornis moluccanus"
 species[527,] = "Threskiornis molucca"
 species = data.frame(species)
 
-# adding keys to species dataframe (obsoloete now?)
+"# adding keys to species dataframe (obsoloete now?)
 for (i in 1:nrow(species)) {
   print(i)
   print(species$species[i])
   species$key[i] = name_suggest(species$species[i])$data[1]
-}
+}"
 
 # reading in island borders
 
@@ -44,15 +42,31 @@ regio <- readOGR("data/Papua_Birdlife_project/Papua_region.shp", integer64="allo
 
 # plotting
 
-plot(regio)
+#plot(regio)
 
 
 # all birbs indonesia gbif (compare scipt MCMMB_GBIF_02.R)
+# remove all unnecessary columns
 # ind_birbs
-ind_birbs = read.csv("data/gbif/aves_indonesia/0303155-200613084148143.csv",header = TRUE, sep = "\t")
-ind_birbs_corrected = ind_birbs[!(is.na(ind_birbs$decimalLatitude) | ind_birbs$decimalLatitude=="" | is.na(ind_birbs$decimalLongitude) | ind_birbs$decimalLongitude==""),]
+gbif_birds = read.csv("data/gbif/aves_indonesia/0303155-200613084148143.csv",header = TRUE, sep = "\t")
+gbif_birds_corrected = gbif_birds[!(is.na(gbif_birds$decimalLatitude) | gbif_birds$decimalLatitude=="" | is.na(gbif_birds$decimalLongitude) | gbif_birds$decimalLongitude==""),]
 
 # create points
-ind_birbs_points = st_as_sf(ind_birbs_corrected, coords = c("decimalLongitude","decimalLatitude"), crs = 4326)
+gbif_points = st_as_sf(gbif_birds_corrected, coords = c("decimalLongitude","decimalLatitude"), crs = 4326)
 
 #crop to indonesian papua
+gbif_crop_all = st_crop(gbif_points, regio)
+
+#remove birds with occurance < x
+# https://stackoverflow.com/questions/37497763/r-delete-rows-in-data-frame-where-nrow-of-index-is-smaller-than-certain-value
+# using 100 as per Van-Proosdij et al. (2016)
+gbif_crop = gbif_crop_all %>% group_by(species) %>% filter(n() >= 100 ) %>% ungroup()
+
+# species list 
+species = sort(unique(gbif_crop$species))
+
+# for plotting:
+#plot(regio)
+#plot(st_geometry(gbif_crop[gbif_crop$species == ""]), add = TRUE)
+
+#source("MCMMB_2.R")

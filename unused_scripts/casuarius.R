@@ -1,4 +1,8 @@
+# initital test plotting of gbif data (i.e. casuarius)
+
 source("MCMMB_Main.R") # libaries and IUCN data read-in
+
+
 
 # display 4 graphs simulatenouasly
 # par(mfrow = c(1,1))
