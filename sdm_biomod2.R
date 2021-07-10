@@ -139,4 +139,3 @@ biomod_proj = BIOMOD_Projection(modeling.output = biomodels_1,
                                 output.format = '.grd' )
 
 plot(biomod_proj)
-#plot(elevation)
