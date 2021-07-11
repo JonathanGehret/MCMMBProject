@@ -1,32 +1,25 @@
 
 #4. use established raster
-source("MCMMB_Main.R")
-"test_function = function(bird_list) {
+#source("MCMMB_Main.R")
 
-# to-do: loop all steps for any given species list
-for (i in gbif_birds) {
-  create presence-absence
-    
-}
-}"
-
-  #plot(regio)
-  
+#function to add absence data to bird_list with spatialpointdataframe of bird presence data, 
+# using elevation raster for grid coordinates and regio raster for extents 
+create_pseudo_absence = function(elevation, regio, bird_list) {
   #1.:get centroids for all grid cells from established raster (here: elevation)
-  # elevation = raster("data/Indicator/elevation/regio_elev.tif") # from extraction.R (maybe move to main?)
+  elevation = raster("data/Indicator/elevation/regio_elev.tif") # from extraction.R (maybe move to main?)
   
   elevation_mask = mask(elevation,regio) # masking elevation over regio
+  
+  # create centroids for grid with column "present" filled with 0 and transformed to sp
   centroids_all = xyFromCell(elevation_mask, which(elevation_mask[]>=0))
-  #points(centroids_all, add = T)
-  
-  
-  
-  
-  #cas_una_gbif = gbif_birds[[1]] # remove later
-  bird_list = gbif_birds # remove later
-  #plot(regio)
+  centroids_all = cbind(centroids_all,present = rep(0,nrow(centroids_all)))
+  centroids_all = SpatialPointsDataFrame(coords = data.frame(centroids_all), data = data.frame(centroids_all))
+  centroids_all@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
+
+  # empty output list to be filled aith all pres/abs data
   presence_absence_list = list()
   
+  set.seed(100)
   for (bird in bird_list) {
       
     #2.: get centroids of all grid cells for specific species by use of mask
@@ -34,30 +27,31 @@ for (i in gbif_birds) {
     # cas_una_gbif is st -> sp with as_Spatial
     species_raster = rasterize(as_Spatial(bird),elevation,1)
     raster_mask = mask(elevation,species_raster)
+    
+    # create centroids for occurence data
     centroids_occ = xyFromCell(raster_mask, which(raster_mask[] > 0))
     
-    # add columns with present data
+    # add columns with presence data 1
     centroids_occ = cbind(centroids_occ,present = c(rep(1,length(centroids_occ[,1]))))
-    centroids_all = cbind(centroids_all,present = rep(0,nrow(centroids_all)))
     
     # transform to SP:
     centroids_occ = SpatialPointsDataFrame(coords = data.frame(centroids_occ), data = data.frame(centroids_occ))
     centroids_occ@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
-    
-    centroids_all = SpatialPointsDataFrame(coords = data.frame(centroids_all), data = data.frame(centroids_all))
-    centroids_all@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
-    
-    # create absence data
-    set.seed(100)
-    cas_una_abs <- rbind(centroids_all[sample(nrow(centroids_all),nrow(centroids_occ), replace = TRUE),],
-                         centroids_occ)
 
-    presence_absence_list$bird = []
-  
+    # create absence data added to presence data
+    presence_absence <- rbind(centroids_all[sample(nrow(centroids_all),nrow(centroids_occ), replace = TRUE),],
+                         centroids_occ)
+    
+    # add to rmd after calling this function ?
+    plot(regio)
+    plot(presence_absence, add = T, col = ifelse(presence_absence$present == 1, "red","green"))
+    
+    # add to list
+    bird_name = unique(bird$species)
+    presence_absence_list[[bird_name]] = presence_absence
   }
-  #cas_una_abs[[1]]
-  plot(regio)
-  # names?? cas_una_pres_abs, cas_una, cas_una_pres, cas_una_occ, cas_una_p_a
-  plot(cas_una_abs, add = T, col = ifelse(cas_una_abs$present == 1, "red","green"))
-  plot(regio)
-  plot(test_spec_abs, add = T, col = ifelse(test_spec_abs$present == 1, "red","green"))
+  
+  return(presence_absence_list)
+  
+}
+

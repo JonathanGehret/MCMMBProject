@@ -16,3 +16,54 @@ Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by press
 When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
 The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+
+# Order:
+
+Skript reihenfolge:
+
+1. MCMMB_Main: (alle librarys, laden der daten IUCN (“birdlife”) , “species” =alle arten aus GBIF = nicht mehr nötig?, berreinigen der GBIF daten/anpassen der Kartengröße und selektion auf 100 präsens Punkte pro Art)
+umbenenen, aufteielen? oder so ok?
+
+```{r}
+source("MCMMB_Main.R")
+# get regio from here
+```
+
+2. MCMMB_2: Indikatoren, erstellen der Rasterkarten
+# rename -> predictors?
+
+```{r}
+source("predictors.R")
+# get elevation and tif_predictors from here?
+```
+
+3. Species_loops: Erstellung der Karten der Verbreitungen der einzelnen Vogelart → heraussuchen welche Familie passt = Pachycephala
+```{r}
+source("species_loops.R")
+
+# create plots of all birds and decide upon birdnames
+# birdnames = c("bird1","bird2",...etc)
+# ... bird_list = species_loops("birdnames")
+```
+
+4. Presence_absence: Erstellen einer Rasterkarte, dessen Werte 1 für presence und für absence =0 sind, die absence wurden zufällig erstellt und sind auch zufällig auf der Karte verteilt
+
+```{r}
+source("presence_absence.R")
+presence_absence_list = create_pseudo_absence(elevation,regio,bird_list)
+```
+
+5. Sdm_biomod2: integrieren der Presence_absence daten, der Indikatoren (Karten) und Kalkulation der SDM´s
+
+```{r}
+source("sdm_biomod2.R")
+#test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
+```
+
+6. plotting and comparing sdms with birdlife data 
+
+```{r}
+source("plotting_sdms.R")
+#plot some nice plots here!
+```

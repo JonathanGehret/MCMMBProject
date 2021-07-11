@@ -28,9 +28,6 @@ cas_una_gbif = gbif_birds[[1]] # remove later
 bird_list = gbif_birds # remove later
 #plot(regio)
 
-for (i in bird_list) {
-  
-}
 species_raster = rasterize(as_Spatial(cas_una_gbif),elevation,1)
 raster_mask = mask(elevation,species_raster)
 centroids_occ = xyFromCell(raster_mask, which(raster_mask[] > 0))
