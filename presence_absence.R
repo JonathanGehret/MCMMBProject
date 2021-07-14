@@ -4,7 +4,9 @@
 
 #function to add absence data to bird_list with spatialpointdataframe of bird presence data, 
 # using elevation raster for grid coordinates and regio raster for extents 
-create_pseudo_absence = function(elevation, regio, bird_list) {
+create_pseudo_absence = function(regio, bird_list) {
+#create_pseudo_absence = function(elevation, regio, bird_list) {
+  
   #1.:get centroids for all grid cells from established raster (here: elevation)
   elevation = raster("data/Indicator/elevation/regio_elev.tif") # from extraction.R (maybe move to main?)
   

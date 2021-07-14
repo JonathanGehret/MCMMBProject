@@ -14,7 +14,8 @@
 
 # move to markdown??
 # shows biomod modelling possibilities:
-# BIOMOD_ModelingOptions() 
+#BIOMOD_ModelingOptions() 
+
 
 # stacking all predictors found in folder indicator stack in .tif format
 # predictors: elevation, precipitation, temperature, primary forest, landcover, population
@@ -31,14 +32,55 @@ presence_absence_list = create_pseudo_absence(regio,gbif_birds)
 # function to calculate sdms with biomod2
 calculate_sdm = function(presence_absence_list, tif_predictors) {
   
+  # for testing purposes
+  #species = presence_absence_list[1]
+  
   # list to be filled with sdms for every species put int
   sdm_list = list()
   
-  for (species in presence_absence_list) {
+  # modify model settings (i.e. k value (degrees of freedom) for GAM)
+  myBiomodOptions = BIOMOD_ModelingOptions(
+    GAM = list( algo = 'GAM_mgcv',
+                type = 's_smoother',
+                #k = 0, 
+                k = 4,
+                interaction.level = 0,
+                myFormula = NULL,
+                family = binomial(link = 'logit'),
+                method = 'GCV.Cp',
+                optimizer = c('outer','newton'),
+                select = FALSE,
+                knots = NULL,
+                paraPen = NULL,
+                control = list(nthreads = 1, irls.reg = 0, epsilon = 1e-07, maxit = 200, trace = FALSE, mgcv.tol = 1e-07
+                               , mgcv.half = 15, rank.tol = 1.49011611938477e-08
+                               , nlm = list(ndigit=7, gradtol=1e-06, stepmax=2, steptol=1e-04, iterlim=200, check.analyticals=0)
+                               , optim = list(factr=1e+07), newton = list(conv.tol=1e-06, maxNstep=5, maxSstep=2, maxHalf=30, use.svd=0)
+                               , outerPIsteps = 0, idLinksBases = TRUE, scalePenalty = TRUE, efs.lspmax = 15, efs.tol = 0.1, keepData = FALSE
+                               , scale.est = "fletcher", edge.correct = FALSE) ), 
+    # standard settings
+    RF = list( do.classif = TRUE,
+               ntree = 500,
+               mtry = 'default',
+               nodesize = 5,
+               #nodesize = 50,
+               maxnodes = NULL)
+    )
+  
+  
+  #for (species in presence_absence_list) {
+  for (i in 1:length(presence_absence_list)) {
     
     # get bird_names 
-    bird_name = unique(species$species)
-
+    # could also hand over names list ("bird_names" in species_loops.R as input for function)
+    #bird_name = unique(species$species)
+    #bird_name = bird_names[1]
+    help_species = presence_absence_list[i]
+    bird_name = names(help_species)
+    
+    # species
+    species = help_species[[i]]
+    
     # get coordinates from prese/abs data
     species_xy = data.frame(cbind(species$x, species$y))
 
@@ -47,7 +89,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     format_bm <- BIOMOD_FormatingData(resp.var = species$present,
                                          expl.var = stack(tif_predictors),
                                          resp.xy = species_xy,
-                                         #eval.resp.var = ,
+                                         #eval.resp.var = 0.5,
                                          #PA.strategy = "random",
                                          #PA.nb.rep = 0, # common practice to resample!
                                          #PA.nb.absences = 0,
@@ -59,10 +101,11 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     2013."
     
     biomodels_1 <- BIOMOD_Modeling(data = format_bm,
-                                #models = c('GLM','GAM','ANN','RF'),
-                                models = c('GLM','ANN','RF'),
+                                models = c('GLM','GAM','ANN','RF'),
+                                #models = c('GLM','ANN','RF'),
+                                #models = c('GAM'),
                                 SaveObj = TRUE,
-                                # models.options = myBiomodOptions,
+                                models.options = myBiomodOptions,
                                 # DataSplit = 80, # common practice to validate!
                                 VarImport = 1)
     
@@ -75,6 +118,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     #biomod_eval["TSS","Testing.data",,,]
     #biomod_eval["KAPPA","Testing.data",,,]
     #biomod_eval["ROC","Testing.data",,,]
+    #evaluate(biomodels_1, data, stat, as.array=FALSE)
     
     " GLM   GAM   ANN    RF 
     0.725    NA 0.757 0.938 "
@@ -87,9 +131,12 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     barplot(height = t(biomod_var_importance),
             beside = T,
             horiz = T,
+            #ylab = c("Precipitation",...),
             xlab = "Variable Importance",
-            #legend = c("GLM", "GAM", "ANN", "RF"))
-            legend = c("GLM", "ANN", "RF"))
+            legend = c("GLM", "GAM", "ANN", "RF"))
+            #legend = c("GLM", "ANN", "RF"))
+            #legend = c("GAM"))
+
     
     
     "
@@ -131,10 +178,11 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
                                     clamping.mask = F,
                                     output.format = '.grd' )
     
-    # make plots beautiful
+    # to-do: make plots beautiful
+    #plot(biomod_proj,xlab="Longitude")
     plot(biomod_proj)
     
-    # write to list for return
+    # write sd models to list for return
     sdm_list[[bird_name]] = biomod_proj
     "Fehler in sdm_list[[bird_name]] <- biomod_proj : 
   attempt to select less than one element in OneIndex"
@@ -142,5 +190,5 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
   return(sdm_list)
 }
 
-#test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
+test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
 #sdm_list[[bird_name]] = biomod

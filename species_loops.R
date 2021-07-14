@@ -9,7 +9,7 @@
 
 # species  vector with all scientific species names
 #bird_names = c(cas_ben_species,cas_cas_species,cas_una_species)
-#bird_names = c("Casuaries bennetti", "Casuarius casuarius", "Casuarius unappendiculatus")
+bird_names = c("Casuaries bennetti", "Casuarius casuarius", "Casuarius unappendiculatus")
 bird_names = c("Pachycephala lorentzi", 
                "Pachycephala meyeri", 
                "Pachycephala schlegelii",

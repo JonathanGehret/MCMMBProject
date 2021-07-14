@@ -51,14 +51,17 @@ source("species_loops.R")
 
 ```{r}
 source("presence_absence.R")
-presence_absence_list = create_pseudo_absence(elevation,regio,bird_list)
+presence_absence_list = create_pseudo_absence(regio,gbif_birds)
+#presence_absence_list = create_pseudo_absence(regio,bird_list)
+#presence_absence_list = create_pseudo_absence(elevation,regio,bird_list)
+
 ```
 
 5. Sdm_biomod2: integrieren der Presence_absence daten, der Indikatoren (Karten) und Kalkulation der SDM´s
 
 ```{r}
 source("sdm_biomod2.R")
-#test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
+test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
 ```
 
 6. plotting and comparing sdms with birdlife data 
