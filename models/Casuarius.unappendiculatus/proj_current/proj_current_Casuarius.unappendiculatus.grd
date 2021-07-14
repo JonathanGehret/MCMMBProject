@@ -1,0 +1,25 @@
+[general]
+creator=R package 'raster'
+created=2021-07-14 15:44:08
+[georeference]
+nrows=1225
+ncols=1407
+xmin=129.291526541
+ymin=-9.133472546
+xmax=141.016526494
+ymax=1.074860747
+projection=+proj=longlat +ellps=WGS84 +no_defs
+[data]
+datatype=INT2S
+byteorder=little
+nbands=4
+bandorder=BIL
+minvalue=0:0:4:2
+maxvalue=1000:1000:997:1000
+nodatavalue=-9999
+[legend]
+legendtype=
+values=
+color=
+[description]
+layername=Casuarius.unappendiculatus_AllData_Full_GLM:Casuarius.unappendiculatus_AllData_Full_GAM:Casuarius.unappendiculatus_AllData_Full_ANN:Casuarius.unappendiculatus_AllData_Full_RF
