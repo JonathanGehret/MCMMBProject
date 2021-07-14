@@ -25,7 +25,7 @@ Skript reihenfolge:
 1. MCMMB_Main: (alle librarys, laden der daten IUCN (“birdlife”) , “species” =alle arten aus GBIF = nicht mehr nötig?, berreinigen der GBIF daten/anpassen der Kartengröße und selektion auf 100 präsens Punkte pro Art)
 umbenenen, aufteielen? oder so ok?
 
-```{r}
+```{r}#,echo=FALSE}
 source("MCMMB_Main.R")
 # get regio from here
 ```
@@ -34,13 +34,22 @@ source("MCMMB_Main.R")
 # rename -> predictors?
 
 ```{r}
-source("predictors.R")
+source("Indicator.R")
 # get elevation and tif_predictors from here?
 ```
 
 3. Species_loops: Erstellung der Karten der Verbreitungen der einzelnen Vogelart → heraussuchen welche Familie passt = Pachycephala
 ```{r}
 source("species_loops.R")
+
+bird_names = c("Casuarius bennetti", "Casuarius casuarius", "Casuarius unappendiculatus")
+bird_names = c("Pachycephala lorentzi", 
+               "Pachycephala meyeri", 
+               "Pachycephala schlegelii",
+               "Pachycephala simplex",
+               "Pachycephala soror")
+
+iucn_birds = 
 
 # create plots of all birds and decide upon birdnames
 # birdnames = c("bird1","bird2",...etc)
@@ -49,11 +58,13 @@ source("species_loops.R")
 
 4. Presence_absence: Erstellen einer Rasterkarte, dessen Werte 1 für presence und für absence =0 sind, die absence wurden zufällig erstellt und sind auch zufällig auf der Karte verteilt
 
+While biomod2 also chas capabilities to create pseudo-absence data, we build a script to do it.
+
 ```{r}
 source("presence_absence.R")
 presence_absence_list = create_pseudo_absence(regio,gbif_birds)
 #presence_absence_list = create_pseudo_absence(regio,bird_list)
-#presence_absence_list = create_pseudo_absence(elevation,regio,bird_list)
+#presence_absence_list = create_pseudo_absence(Elevation,regio,bird_list)
 
 ```
 
@@ -70,3 +81,60 @@ test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
 source("plotting_sdms.R")
 #plot some nice plots here!
 ```
+
+
+
+
+
+
+xxx.Example for how to attach code:
+
+### 7.2 Code
+
+MCMM
+
+Mardown script auch hinzufügen!? und/oder mit abgeben
+
+photosynthesis_tests_loop.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/photosynthesis_tests_loop.R"), class.source = "fold-hide"}
+```
+setup_Photosynthesis_StomatalConductance.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/setup_Photosynthesis_StomatalConductance.R"), class.source = "fold-hide"}
+```
+fun_calc_an_gs.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/fun_calc_an_gs.R"), class.source = "fold-hide"}
+```
+calc_fun_Photosynthesis_StomatalConductance.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/calc_fun_Photosynthesis_StomatalConductance.R"), class.source = "fold-hide"}
+```
+satvap.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/satvap.R"), class.source = "fold-hide"}
+```
+LeafBoundaryLayer.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/LeafBoundaryLayer.R"), class.source = "fold-hide"}
+```
+PAR.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/PAR.R"), class.source = "fold-hide"}
+```
+hybrid_root_ci.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/hybrid_root_ci.R"), class.source = "fold-hide"}
+```
+brent_root_ci.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/brent_root_ci.R"), class.source = "fold-hide"}
+```
+CiFunc.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/CiFunc.R"), class.source = "fold-hide"}
+```
+photosynthesis_calib.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/photosynthesis_calib.R"), class.source = "fold-hide"}
+```
+setup_photosynthesis_calib.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/setup_photosynthesis_calib.R"), class.source = "fold-hide"}
+```
+fun_costphoto.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/fun_costphoto.R"), class.source = "fold-hide"}
+```
+fun_photosynthesis_calib.R
+```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/fun_photosynthesis_calib.R"), class.source = "fold-hide"}
+```
+

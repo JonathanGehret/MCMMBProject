@@ -39,6 +39,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
   sdm_list = list()
   
   # modify model settings (i.e. k value (degrees of freedom) for GAM)
+  # big but not too big for k
   myBiomodOptions = BIOMOD_ModelingOptions(
     GAM = list( algo = 'GAM_mgcv',
                 type = 's_smoother',
@@ -79,7 +80,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     bird_name = names(help_species)
     
     # species
-    species = help_species[[i]]
+    species = help_species[[1]]
     
     # get coordinates from prese/abs data
     species_xy = data.frame(cbind(species$x, species$y))
@@ -89,10 +90,6 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     format_bm <- BIOMOD_FormatingData(resp.var = species$present,
                                          expl.var = stack(tif_predictors),
                                          resp.xy = species_xy,
-                                         #eval.resp.var = 0.5,
-                                         #PA.strategy = "random",
-                                         #PA.nb.rep = 0, # common practice to resample!
-                                         #PA.nb.absences = 0,
                                          resp.name = bird_name)
     
     "Be sure to take care when considering the use of pseudo-absences versus true absences for species distribution
@@ -122,6 +119,15 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     
     " GLM   GAM   ANN    RF 
     0.725    NA 0.757 0.938 "
+    #>     biomod_eval["TSS","Testing.data",,,]
+    #GLM   GAM   ANN    RF 
+    #1.000 1.000 1.000 0.967 
+    #>     biomod_eval["KAPPA","Testing.data",,,]
+    #GLM   GAM   ANN    RF 
+    #1.000 1.000 1.000 0.967 
+    #>     biomod_eval["ROC","Testing.data",,,]
+    #GLM   GAM   ANN    RF 
+    #1.000 1.000 1.000 0.999 
     
     "We can also calculate variable importances to compare influences of individual predictor variables within and
     among models. For a publication, you might also create partial dependence plots. Do the different models
@@ -148,7 +154,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
                                               chosen.models = 'all',
                                               em.by = 'all',
                                               eval.metric = c('TSS'),
-                                              eval.metric.quality.threshold = c(0.4),
+                                              eval.metric.quality.threshold = c(0.3),
                                               prob.mean = TRUE,
                                               prob.mean.weight = FALSE,
                                               prob.cv = FALSE,

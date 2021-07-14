@@ -9,7 +9,7 @@
 
 # species  vector with all scientific species names
 #bird_names = c(cas_ben_species,cas_cas_species,cas_una_species)
-bird_names = c("Casuaries bennetti", "Casuarius casuarius", "Casuarius unappendiculatus")
+bird_names = c("Casuarius bennetti", "Casuarius casuarius", "Casuarius unappendiculatus")
 bird_names = c("Pachycephala lorentzi", 
                "Pachycephala meyeri", 
                "Pachycephala schlegelii",
@@ -17,31 +17,32 @@ bird_names = c("Pachycephala lorentzi",
                "Pachycephala soror")
 
 #1. IUCN
-
 # getting and plotting iucn birdlife birds in loop using scientific names vector:
-iucn_birds = list()
-for (i in bird_names) {
-  iucn_bird = birdlife[birdlife$SCINAME == i,]
-  iucn_birds[[i]] = iucn_bird
-  #plotting optional
-  plot(regio)
-  plot(iucn_bird, add = T, col = "red")
+# Function to create list of with IUCN Birdlife data for spedcified bird_names 
+get_iucn_birds = function(bird_names,birdlife,regio) {
+  iucn_birds = list()
+  for (i in bird_names) {
+    iucn_bird = birdlife[birdlife$SCINAME == i,]
+    iucn_birds[[i]] = iucn_bird
+    #plotting optional
+    plot(regio)
+    plot(iucn_bird, add = T, col = "red")
+  }
+  return(iucn_birds)
 }
-
 
 #2. GBIF
-
 # loop for getting gibf data for any scientific bird names ("Genus species") in vector
-gbif_birds = list() # creaty emtpy list
-for (i in bird_names) {
-  gbif_bird = gbif_crop[gbif_crop$species == i,]
-  gbif_birds[[i]] = gbif_bird
-  #plotting optional
-  plot(regio)
-  plot(st_geometry(gbif_bird), pch=16, col="green", add = TRUE) 
+get_gbif_birds <- function(bird_names,gbif_crop,regio) {
+  gbif_birds = list() # creaty emtpy list
+  for (i in bird_names) {
+    gbif_bird = gbif_crop[gbif_crop$species == i,]
+    gbif_birds[[i]] = gbif_bird
+    #plotting optional
+    plot(regio)
+    plot(st_geometry(gbif_bird), pch=16, col="green", add = TRUE) 
+  }
 }
-
-
 
 # legend("bottomleft", legend = c("Casuarius unappendiculatus","Casuarius bennetti","Casuarius casuarius"), 
 #       fill = c("black","red","yellow"))
@@ -51,6 +52,9 @@ for (i in bird_names) {
 
 # plotting a map for every single bird species in indonesia!
 # adjusting for cropped 100 species!
+all_iucn_birds <- function(species,birdlife,regio) {
+  
+}
 par(mfrow=c(4,4))
 for (i in 1:length(species$species)) {
   #for (i in 1:16) {

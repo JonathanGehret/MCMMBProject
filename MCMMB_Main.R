@@ -61,9 +61,11 @@ gbif_crop_all = st_crop(gbif_points, regio)
 # https://stackoverflow.com/questions/37497763/r-delete-rows-in-data-frame-where-nrow-of-index-is-smaller-than-certain-value
 # using 100 as per Van-Proosdij et al. (2016)
 gbif_crop = gbif_crop_all %>% group_by(species) %>% filter(n() >= 100 ) %>% ungroup()
-
+#gbif_crop = gbif_crop_all
 # species list 
 species = sort(unique(gbif_crop$species))
+#species = sort(unique(gbif_crop_all$species))
+
 
 # for plotting:
 #plot(regio)
