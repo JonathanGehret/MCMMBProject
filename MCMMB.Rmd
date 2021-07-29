@@ -4,12 +4,13 @@ title: How do IUCN Range maps of birds compare to SDMs in Indonesian New Guinea?
 author: "Jonathan Gehret, Paul Leister"
 date: "31.08.2021"
 output:
-  html_notebook:
-    toc: yes
-    code_folding: show
   html_document:
     toc: yes
     df_print: paged
+    code_folding: show
+#  html_notebook:
+#    toc: yes
+#    code_folding: show
 ---
 
 ```{r setup, include=FALSE}
