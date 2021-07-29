@@ -25,7 +25,7 @@ get_iucn_birds = function(bird_names,birdlife,regio) {
     iucn_bird = birdlife[birdlife$SCINAME == i,]
     iucn_birds[[i]] = iucn_bird
     #plotting optional
-    plot(regio)
+    plot(regio, main = i, cex.main = 0.8)
     plot(iucn_bird, add = T, col = "red")
   }
   return(iucn_birds)
@@ -39,9 +39,10 @@ get_gbif_birds <- function(bird_names,gbif_crop,regio) {
     gbif_bird = gbif_crop[gbif_crop$species == i,]
     gbif_birds[[i]] = gbif_bird
     #plotting optional
-    plot(regio)
+    plot(regio, main = i, cex.main = 0.8)
     plot(st_geometry(gbif_bird), pch=16, col="green", add = TRUE) 
   }
+  return(gbif_birds)
 }
 
 # legend("bottomleft", legend = c("Casuarius unappendiculatus","Casuarius bennetti","Casuarius casuarius"), 

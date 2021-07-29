@@ -8,7 +8,7 @@ create_pseudo_absence = function(regio, bird_list) {
 #create_pseudo_absence = function(elevation, regio, bird_list) {
   
   #1.:get centroids for all grid cells from established raster (here: elevation)
-  elevation = raster("data/Indicator/elevation/regio_elev.tif") # from extraction.R (maybe move to main?)
+  elevation = raster("data/indicator_stack/Elevation.tif") # from extraction.R (maybe move to main?)
   
   elevation_mask = mask(elevation,regio) # masking elevation over regio
   
@@ -44,13 +44,13 @@ create_pseudo_absence = function(regio, bird_list) {
     presence_absence <- rbind(centroids_all[sample(nrow(centroids_all),nrow(centroids_occ), replace = TRUE),],
                          centroids_occ)
     
-    # add to rmd after calling this function ?
-    plot(regio)
-    plot(presence_absence, add = T, col = ifelse(presence_absence$present == 1, "red","green"))
-    
     # add to list
     bird_name = unique(bird$species)
     presence_absence_list[[bird_name]] = presence_absence
+    
+    # plotting the presence absence data
+    plot(regio, main = bird_name)
+    plot(presence_absence, add = T, col = ifelse(presence_absence$present == 1, "red","green"))
   }
   
   return(presence_absence_list)
