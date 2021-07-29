@@ -22,10 +22,13 @@ The preview shows you a rendered HTML copy of the contents of the editor. Conseq
 
 Skript reihenfolge:
 
+# To find the species to be used for our analysis we used the loops in bird_plot_loops.R to plot all species from the gbif and IUCN datasets to find firds with sufficient observation points and different ranges to be used for our project.
+
 1. MCMMB_Main: (alle librarys, laden der daten IUCN (“birdlife”) , “species” =alle arten aus GBIF = nicht mehr nötig?, berreinigen der GBIF daten/anpassen der Kartengröße und selektion auf 100 präsens Punkte pro Art)
 umbenenen, aufteielen? oder so ok?
+#,echo=FALSE}
 
-```{r}#,echo=FALSE}
+```{r}
 source("MCMMB_Main.R")
 # get regio from here
 ```
@@ -33,12 +36,14 @@ source("MCMMB_Main.R")
 2. MCMMB_2: Indikatoren, erstellen der Rasterkarten
 # rename -> predictors?
 
+The Indicator.R script is used to read in data for the various indicators to be used for the SDM. These are then cropped to the target region and saved in .tif format in the folder data/indicator_stack/ for later use. As the process for some of the bigger files takes a lot of time, ready to use indicator .tif files are to be found in the aformentioned folder.
+
 ```{r}
-source("Indicator.R")
+# source("Indicator.R")
 # get elevation and tif_predictors from here?
 ```
 
-3. Species_loops: Erstellung der Karten der Verbreitungen der einzelnen Vogelart → heraussuchen welche Familie passt = Pachycephala
+3. The script species_loops.R includes multiple functions for plotting all species in indonesia found in gbif, one for plotting all species found in IUCN birdlife. It includes two functions each for creating lists with the input bird species data for gbif ("get_gbif_birds(bird_names,gbif_crop,regio)") and IUCN ("get_iucn_birds(bird_names,birdlife,regio)") respectively : Erstellung der Karten der Verbreitungen der einzelnen Vogelart → heraussuchen welche Familie passt = Pachycephala
 ```{r}
 source("species_loops.R")
 

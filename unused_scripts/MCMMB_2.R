@@ -53,7 +53,7 @@ writeRaster(papua_borders_project_raster, filename=file.path("data/Indicator/nat
 
 
 #elevation map
-#elev <- raster("data/Indicator/elevation/mn30_grd")
+elev <- raster("data/Indicator/mn30_grd")
 #par(mfrow=c(1,1))
 #plot(elev)
 
