@@ -1,56 +1,18 @@
 # Evaluation
-
-# comparing plots 
-# to-do: loop over layers
-
-# loading model
-#biomod_proj = BIOMOD_LoadModels(bm.out = "Test.Spec/Test.Spec.1625930744.models.out")
-
-# compare gbif with elevation
-
-par(mfrow=c(2,3))
-
-biomod_proj = test_sdms[[3]]
-#biomod_proj@proj@val@crs = CRS("+proj=longlat +ellps=WGS84 +no_defs")
-
-bio = biomod_proj@proj@val@layers
-
-for (i in bio) {
-plot(elevation, fill = FALSE)
-plot(i, add = T, col =  rgb(red = 0.5, green = 0.5, blue = 0.5, alpha = 0.5))
-
-}
-
-
-#compare IUCN with GBIF
-par(mfrow=c(2,3))
-
-bio = biomod_proj@proj@val@layers
-
-pdf("plots.pdf")
-for (i in bio) {
-  plot(i)
-  plot(iucn_birds$`Casuarius unappendiculatus`, add = T, col =  rgb(red = 0, green = 0, blue = 1, alpha = 0.3))
-  plot_names = paste("images/sdm_iucn/",names(i),".png")
-  #print(plot_names)
-  #print()
+# compare gbif with iucn for all birds j and sdms i
+par(mfrow=c(2,2))
+#pdf("plots.pdf")
+for (j in 1:length(test_sdms)) {
+  bird = test_sdms[[j]]
+  sdms = bird@proj@val@layers
+  #bird_names = names(test_sdms[j])
+  for (i in 1:length(sdms)) {
+    sdm = sdms[[i]]
+    plot(sdm, main = names(sdm@data))
+    plot(iucn_birds[[j]], add = T, col =  rgb(red = 0, green = 0, blue = 1, alpha = 0.3))
+  }
+  #plot_names = paste("images/sdm_iucn/",names(i),".png")
+  
   #savePlot(filename = plot_names, type = "png")
   #tiff("images/sdm_iucn/.tiff")
-  
 }
-
-
-pdf("plots.pdf")
-for (i in 1:length(bio)) {
-  plot(bio[i])
-  plot(iucn_birds$[i], add = T, col =  rgb(red = 0, green = 0, blue = 1, alpha = 0.3))
-  plot_names = paste("images/sdm_iucn/",names(i),".png")
-  #print(plot_names)
-  #print()
-  #savePlot(filename = plot_names, type = "png")
-  #tiff("images/sdm_iucn/.tiff")
-  
-}
-
-# save pdfs as code
-# par/gridarrange um plots zu arrangieren (wenig white space)

@@ -1,20 +1,13 @@
 # Loops to access iucn birdlife and gbif data by bird_names
-# could even combine booth loops into one!
 
-# use MCMMB_main for libraries and data
-#source("MCMMB_Main.R")
-
-# add different colors per species?
-
-
-# species  vector with all scientific species names
+# species  vector with all scientific species names, example species
 #bird_names = c(cas_ben_species,cas_cas_species,cas_una_species)
-bird_names = c("Casuarius bennetti", "Casuarius casuarius", "Casuarius unappendiculatus")
-bird_names = c("Pachycephala lorentzi", 
-               "Pachycephala meyeri", 
-               "Pachycephala schlegelii",
-               "Pachycephala simplex",
-               "Pachycephala soror")
+#bird_names = c("Casuarius bennetti", "Casuarius casuarius", "Casuarius unappendiculatus")
+#bird_names = c("Pachycephala lorentzi", 
+#               "Pachycephala meyeri", 
+#               "Pachycephala schlegelii",
+#               "Pachycephala simplex",
+#               "Pachycephala soror")
 
 #1. IUCN
 # getting and plotting iucn birdlife birds in loop using scientific names vector:

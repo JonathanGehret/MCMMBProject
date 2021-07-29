@@ -1,29 +1,7 @@
 # following https://griffithdan.github.io/pages/outreach/SDM-Workshop-OSU-FALL2017.pdf
 
-
-# read in PRISM data (I have provided it but you could access the data using the
-# "prism" R package)
-
-# dont forget to divide temperature by ten
-# so far only temperature and precip, others have "differnet extent"
-# grid@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
-
-
-# load everything (move somewhere else)
-#source("MCMMB_Main.R")
-
-# move to markdown??
 # shows biomod modelling possibilities:
-#BIOMOD_ModelingOptions() 
-
-
-# stacking all predictors found in folder indicator stack in .tif format
-# predictors: elevation, precipitation, temperature, primary forest, landcover, population
-# move to predictor script?
-tif_predictors <- stack(list.files(path = "data/indicator_stack/",
-                                full.names = TRUE,
-                                pattern = ".tif"))
-plot(tif_predictors)
+#BIOMOD_ModelingOptions()
 
 # create pres/abs data with script presence_absence.R (move to main script?)
 source("presence_absence.R")
@@ -67,15 +45,10 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
                #nodesize = 50,
                maxnodes = NULL)
     )
-  
-  
-  #for (species in presence_absence_list) {
+
   for (i in 1:length(presence_absence_list)) {
     
     # get bird_names 
-    # could also hand over names list ("bird_names" in species_loops.R as input for function)
-    #bird_name = unique(species$species)
-    #bird_name = bird_names[1]
     help_species = presence_absence_list[i]
     bird_name = names(help_species)
     
@@ -85,22 +58,16 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     # get coordinates from prese/abs data
     species_xy = data.frame(cbind(species$x, species$y))
 
-    # split datset into two for evaluation data?
+    # potentially: split dataset into two for evaluation data
     # putting the data into right format
     format_bm <- BIOMOD_FormatingData(resp.var = species$present,
                                          expl.var = stack(tif_predictors),
                                          resp.xy = species_xy,
                                          resp.name = bird_name)
     
-    "Be sure to take care when considering the use of pseudo-absences versus true absences for species distribution
-    modeling. Similarly, it is extremely important to consider the influence of sampling bias in the data used to
-    train models. Further reading: e.g., Guillera-Arroita et al. 2015, Kramer-Schadt et al. 2013, and Merow et al
-    2013."
-    
+    # modeling the sdms
     biomodels_1 <- BIOMOD_Modeling(data = format_bm,
                                 models = c('GLM','GAM','ANN','RF'),
-                                #models = c('GLM','ANN','RF'),
-                                #models = c('GAM'),
                                 SaveObj = TRUE,
                                 models.options = myBiomodOptions,
                                 # DataSplit = 80, # common practice to validate!
@@ -140,11 +107,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
             #ylab = c("Precipitation",...),
             xlab = "Variable Importance",
             legend = c("GLM", "GAM", "ANN", "RF"))
-            #legend = c("GLM", "ANN", "RF"))
-            #legend = c("GAM"))
 
-    
-    
     "
     One approach for using the information in these various models is to combine them into an ensemble, or
     collection of models merged together (Thuiller et al. 2009). We can take all models above a given “quality”

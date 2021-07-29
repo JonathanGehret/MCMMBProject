@@ -1,57 +1,57 @@
 ---
-title: "R Notebook"
-output: 
-  html_notebook:  
-    toc: true
+title: How do IUCN Range maps of birds compare to SDMs in Indonesian New Guinea? What
+  are the main predictors for this distribution?
+author: "Jonathan Gehret, Paul Leister"
+date: "31.08.2021"
+output:
+  html_notebook:
+    toc: yes
+    code_folding: show
+  html_document:
+    toc: yes
+    df_print: paged
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
-
-```{r}
-plot(cars)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+# 1. Introduction
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+# 2. Methods
 
-# Order:
+To find the species to be used for our analysis we used the loops in bird_plot_loops.R to plot all species from the gbif and IUCN datasets to find birds with sufficient observation points and different ranges to be used for our project.
 
-Skript reihenfolge:
+## 2.1. Main script
 
-# To find the species to be used for our analysis we used the loops in bird_plot_loops.R to plot all species from the gbif and IUCN datasets to find firds with sufficient observation points and different ranges to be used for our project.
+The required libraries and the setup of the IUCN and gbif data sets are done in the MCMMB_Main.R script. Notably, the HBIF data are created only for species with greater than 100 observations.The GBIF data were downloaded manually beforehand, however the r library "rgbif" could be used instead. Additionally, the island borders are read in and given the name "regio".
 
-## 1. MCMMB_Main: (alle librarys, laden der daten IUCN ("birdlife") , "species" =alle arten aus GBIF = nicht mehr nötig?, berreinigen der GBIF daten/anpassen der Kartengröße und selektion auf 100 präsens Punkte pro Art) umbenenen, aufteielen? oder so ok? \#,echo=FALSE}
-
-```{r}
+```{r, results='hide'}
 source("MCMMB_Main.R")
-# get regio from here
 ```
 
-## 2.  MCMMB_2: Indikatoren, erstellen der Rasterkarten \# rename -\> predictors?
 
-The Indicator.R script is used to read in data for the various indicators to be used for the SDM. These are then cropped to the target region and saved in .tif format in the folder data/indicator_stack/ for later use. As the process for some of the bigger files takes a lot of time, ready to use indicator .tif files are to be found in the aforementioned folder.
+## 2.2. Species data  
 
-```{r}
-# source("Indicator.R")
-# get elevation and tif_predictors from here?
-```
-
-## 3.  The script species_loops.R includes multiple functions for plotting all species in indonesia found in gbif, one for plotting all species found in IUCN birdlife. It includes two functions each for creating lists with the input bird species data for gbif ("get_gbif_birds(bird_names,gbif_crop,regio)") and IUCN ("get_iucn_birds(bird_names,birdlife,regio)") respectively : Erstellung der Karten der Verbreitungen der einzelnen Vogelart → heraussuchen welche Familie passt = Pachycephala
+The script species_loops.R includes two functions each for creating lists with the input bird species data for gbif ("get_gbif_birds(bird_names,gbif_crop,regio)") and IUCN ("get_iucn_birds(bird_names,birdlife,regio)") and plotting them, respectively.
 
 ```{r}
+# loading of the descriped functions
 source("species_loops.R")
 
+# cassowaries didn't have enough data
 #bird_names = c("Casuarius bennetti", "Casuarius casuarius", "Casuarius unappendiculatus")
+
+# we chose Pachycephala instead
 bird_names = c("Pachycephala lorentzi", 
                "Pachycephala meyeri", 
                "Pachycephala schlegelii",
                "Pachycephala simplex",
                "Pachycephala soror")
+
+# these names can be changed to any other bird species occuring in the data sets, for fully automated creation of sdms following this markdown file:
+# bird_names = c(your_favorite_species_here)
 
 # for plotting gbif data next to iucn data
 par(mfrow = c(2,length(bird_names)))
@@ -61,106 +61,95 @@ iucn_birds = get_iucn_birds(bird_names,birdlife,regio)
 gbif_birds = get_gbif_birds(bird_names,gbif_crop,regio)
 ```
 
-## 4.  Presence_absence: Erstellen einer Rasterkarte, dessen Werte 1 für presence und für absence =0 sind, die absence wurden zufällig erstellt und sind auch zufällig auf der Karte verteilt
+## 2.3. Create presence-absence data
 
-While biomod2 also chas capabilities to create pseudo-absence data, we build a script to do it.
+While biomod2 also brings with it capabilities to create pseudo-absence data, we built a script to do it. First centroids for the area were created, based on that an equal number to the presence data of absence points is created.
+
+    "Be sure to take care when considering the use of pseudo-absences versus true absences for species distribution
+    modeling. Similarly, it is extremely important to consider the influence of sampling bias in the data used to
+    train models. Further reading: e.g., Guillera-Arroita et al. 2015, Kramer-Schadt et al. 2013, and Merow et al
+    2013."
+    
 
 ```{r}
+# load presence_absence.R script including the function
 source("presence_absence.R")
 presence_absence_list = create_pseudo_absence(regio,gbif_birds)
-#presence_absence_list = create_pseudo_absence(regio,bird_list)
-#presence_absence_list = create_pseudo_absence(Elevation,regio,bird_list)
-
 ```
 
-## 5.  Sdm_biomod2: integrieren der Presence_absence daten, der Indikatoren (Karten) und Kalkulation der SDM´s
+## 2.4. Indicators
 
-```{r,message=FALSE}
+The Indicator.R script is used to read in data for the various indicators (precipitation, elevation, landcover, primary_forest, temperature, human population) to be used for the SDM. These are then cropped to the target region and saved in .tif format in the folder data/indicator_stack/ for later use. As the process for some of the bigger files takes a lot of time, ready to use indicator .tif files are to be found in the aforementioned folder. These will then be loaded and stacked later on before the sdm creation.
+
+```{r, eval = FALSE}
+# where all the predictors are loaded in
+source("Indicator.R")
+```
+
+```{r}
+# stacking all predictors found in folder indicator stack in .tif format
+# predictors: elevation, precipitation, temperature, primary forest, landcover, population
+tif_predictors = stack(list.files(path = "data/indicator_stack/",
+                                full.names = TRUE,
+                                pattern = ".tif"))
+plot(tif_predictors)
+```
+
+
+## 2.5. Species distribution models
+
+Using biomod2, the indicator stack, and the presence absence data with the gbif birds of interest the species distribution models with the methods GLM, GAM, RF and ANN are produced. There are also alternative methods available, which can be shown using "BIOMOD_ModelingOptions()". Each of the individual SDM versions can also be modified further, as can be seen in our script we modified k for the GAM (line 25). The dtaa set was not split in two for evaluation, however this step could be done next time.
+
+```{r,results='hide'}
+# loading biomod script and passing ensemble models to test_sdms
 source("sdm_biomod2.R")
 test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
 ```
 
-## 6.  plotting and comparing sdms with birdlife data
+## 2.6. Comparison SDMs and IUCN
+
+Plotting and comparing sdms with birdlife data.
 
 ```{r}
 source("plotting_sdms.R")
 #plot some nice plots here!
 ```
 
-xxx.Example for how to attach code:
 
-### 7.2 Code
+## 7.2 Code
 
-MCMM
 
-Mardown script auch hinzufügen!? und/oder mit abgeben
+MCMMB.Rmd
 
-photosynthesis_tests_loop.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/photosynthesis_tests_loop.R"), class.source = "fold-hide"}
+```{r, eval = FALSE, code = xfun::read_utf8("MCMMB.Rmd"), class.source = "fold-hide"}
 ```
 
-setup_Photosynthesis_StomatalConductance.R
+MCMMB_Main.R
 
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/setup_Photosynthesis_StomatalConductance.R"), class.source = "fold-hide"}
+```{r, eval = FALSE, code = xfun::read_utf8("MCMMB_Main.R"), class.source = "fold-hide"}
 ```
 
-fun_calc_an_gs.R
+species_loops.R
 
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/fun_calc_an_gs.R"), class.source = "fold-hide"}
+```{r, eval = FALSE, code = xfun::read_utf8("species_loops.R"), class.source = "fold-hide"}
 ```
 
-calc_fun_Photosynthesis_StomatalConductance.R
+presence_absence.R
 
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/calc_fun_Photosynthesis_StomatalConductance.R"), class.source = "fold-hide"}
+```{r, eval = FALSE, code = xfun::read_utf8("presence_absence.R"), class.source = "fold-hide"}
 ```
 
-satvap.R
+Indicator.R
 
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/satvap.R"), class.source = "fold-hide"}
+```{r, eval = FALSE, code = xfun::read_utf8("Indicator.R"), class.source = "fold-hide"}
 ```
 
-LeafBoundaryLayer.R
+sdm_biomod2.R
 
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/LeafBoundaryLayer.R"), class.source = "fold-hide"}
+```{r, eval = FALSE, code = xfun::read_utf8("sdm_biomod2.R"), class.source = "fold-hide"}
 ```
 
-PAR.R
+plotting_sdms.R
 
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/PAR.R"), class.source = "fold-hide"}
-```
-
-hybrid_root_ci.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/hybrid_root_ci.R"), class.source = "fold-hide"}
-```
-
-brent_root_ci.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/brent_root_ci.R"), class.source = "fold-hide"}
-```
-
-CiFunc.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/CiFunc.R"), class.source = "fold-hide"}
-```
-
-photosynthesis_calib.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/photosynthesis_calib.R"), class.source = "fold-hide"}
-```
-
-setup_photosynthesis_calib.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/setup_photosynthesis_calib.R"), class.source = "fold-hide"}
-```
-
-fun_costphoto.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/fun_costphoto.R"), class.source = "fold-hide"}
-```
-
-fun_photosynthesis_calib.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("an_gs_scripts/fun_photosynthesis_calib.R"), class.source = "fold-hide"}
+```{r, eval = FALSE, code = xfun::read_utf8("plotting_sdms.R"), class.source = "fold-hide"}
 ```
