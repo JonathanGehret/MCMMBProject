@@ -4,10 +4,9 @@ title: How do IUCN Range maps of birds compare to SDMs in Indonesian New Guinea?
 author: "Jonathan Gehret, Paul Leister"
 date: "31.08.2021"
 output:
-  pdf_document:
+  html_document:
     toc: yes
-  html_notebook:
-    toc: yes
+    df_print: paged
     code_folding: show
 ---
 
@@ -105,7 +104,9 @@ source("sdm_biomod2.R")
 test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
 ```
 
-## 2.6. Comparison SDMs and IUCN
+# 3. Results
+
+## 3.1. Comparison SDMs and IUCN
 
 Plotting and comparing sdms with birdlife data.
 
