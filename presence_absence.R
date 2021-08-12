@@ -3,7 +3,7 @@
 create_pseudo_absence = function(regio, bird_list) {
 
   #1.:get centroids for all grid cells from established raster (here: elevation)
-  elevation = raster("data/indicator_stack/Elevation.tif") # from extraction.R (maybe move to main?)
+  elevation = raster("data/indicator_stack/Elevation.tif") # from extraction.R 
   
   elevation_mask = mask(elevation,regio) # masking elevation over regio
   

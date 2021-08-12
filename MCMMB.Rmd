@@ -4,16 +4,14 @@ title: How do IUCN Range maps of birds compare to SDMs in Indonesian New Guinea?
 author: "Jonathan Gehret, Paul Leister"
 date: "31.08.2021"
 output:
-  html_document:
+  pdf_document:
     toc: yes
-    df_print: paged
+  html_notebook:
+    toc: yes
     code_folding: show
-#  html_notebook:
-#    toc: yes
-#    code_folding: show
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -22,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 2. Methods
 
-To find the species to be used for our analysis we used the loops in bird_plot_loops.R to plot all species from the gbif and IUCN datasets to find birds with sufficient observation points and different ranges to be used for our project.
+To find the species to be used for our analysis we used the loops in bird_plot_loops.R to plot all species from the Gbif and IUCN data sets to find birds with sufficient observation points and different ranges to be used for our project.
 
 ## 2.1. Main script
 
@@ -99,7 +97,7 @@ plot(tif_predictors)
 
 ## 2.5. Species distribution models
 
-Using biomod2, the indicator stack, and the presence absence data with the gbif birds of interest the species distribution models with the methods GLM, GAM, RF and ANN are produced. There are also alternative methods available, which can be shown using "BIOMOD_ModelingOptions()". Each of the individual SDM versions can also be modified further, as can be seen in our script we modified k for the GAM (line 25). The dtaa set was not split in two for evaluation, however this step could be done next time.
+Using biomod2, the indicator stack, and the presence absence data with the gbif birds of interest the species distribution models with the methods GLM, GAM, RF and ANN are produced. There are also alternative methods available, which can be shown using "BIOMOD_ModelingOptions()". Each of the individual SDM versions can also be modified further, as can be seen in our script we modified k for the GAM (line 25). The data set was not split in two for evaluation, however this step could be done next time. The calculated models are saved to file (argument SaveObj = TRUE in BIOMOD_Modeling()).
 
 ```{r,results='hide'}
 # loading biomod script and passing ensemble models to test_sdms
@@ -153,4 +151,9 @@ sdm_biomod2.R
 plotting_sdms.R
 
 ```{r, eval = FALSE, code = xfun::read_utf8("plotting_sdms.R"), class.source = "fold-hide"}
+```
+
+bird_plot_loops.R
+
+```{r, eval = FALSE, code = xfun::read_utf8("bird_plot_loops.R"), class.source = "fold-hide"}
 ```
