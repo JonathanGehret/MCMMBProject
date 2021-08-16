@@ -172,10 +172,12 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     ensemble_list[[bird_name]] = biomod_ensemble
     sdm_list[[bird_name]] = biomod_proj
   }
+  
   # combine all output lists into one list and return it
   output_list = list(model_list,var_imp_list,ensemble_list,sdm_list)
   names(output_list) = c("sdm","var_imp","ensemble","sdm_proj")
   return(output_list)
+  
 }
 
 

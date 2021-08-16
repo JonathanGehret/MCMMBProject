@@ -53,7 +53,7 @@ bird_names = c("Pachycephala lorentzi",
 # bird_names = c(your_favorite_species_here)
 
 # for plotting gbif data next to iucn data
-par(mfrow = c(length(bird_names),2))
+par(mfrow = c(2,length(bird_names)))
 
 # create list with birds out of the iucn and gbif data and plot them
 iucn_birds = get_iucn_birds(bird_names,birdlife,regio)
@@ -104,16 +104,19 @@ Using biomod2, the indicator stack, and the presence absence data with the gbif 
 ```{r sdm, results='hide'}
 # loading biomod script and passing models to test_sdms
 source("sdm_biomod2.R")
-test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
+gbif_sdms = calculate_sdm(presence_absence_list, tif_predictors)
 ```
 
 # keep this in 2 or also 3??
 
 ```{r model_eval}
-for (i in 1:length(test_sdms$`Pachycephala soror`[[2]])) {
+for (i in 1:length(gbif_birds)) {
+#for (i in 1:length(test_sdms$`Pachycephala soror`[[2]])) {
   #get_evaluations(test_sdms$`Pachycephala soror`[[1]][[i]])
-  biomod_eval[i] = get_evaluations(test_sdms$`Pachycephala soror`[[1]][[i]])
-  biomod_eval[i]
+  #biomod_eval[i] = get_evaluations(test_sdms$`Pachycephala soror`[[1]][[i]])
+  get_evaluations(gbif_sdms$sdm[[i]])
+  #biomod_eval[i] = get_evaluations(gbif_sdms$sdm[[i]])
+  #biomod_eval[i]
 }
 ```
 
@@ -123,13 +126,15 @@ add this to 3?
  
 ```{r var_imp}
 #for (biomod_var_importance in test_sdms$`Pachycephala soror`[[2]]) {
-for (i in 1:length(test_sdms$`Pachycephala soror`[[2]])) {
+for (i in 1:length(gbif_birds)) {
   #barplot(height = t(biomod_var_importance),
-  barplot(height = t(test_sdms$`Pachycephala soror`[[2]][[i]]),
+  #barplot(height = t(test_sdms$`Pachycephala soror`[[2]][[i]]),
+  barplot(height = t(gbif_sdms$var_imp[[i]]),
           beside = T,
           horiz = T,
           #ylab = c("Precipitation",...),
-          main = names(test_sdms$`Pachycephala soror`[[2]][i]),
+          #main = names(test_sdms$`Pachycephala soror`[[2]][i]),
+          main = names(gbif_sdms$var_imp[i]),
           xlab = "Variable Importance",
           legend = c("GLM", "GAM", "ANN", "RF"))
 }
@@ -142,11 +147,14 @@ for (i in 1:length(test_sdms$`Pachycephala soror`[[2]])) {
 
 #get_evaluations(test_sdms$`Pachycephala soror`[[3]][[1]])
 
-
+for (i in 1:length(gbif_birds)) {
+  
+plot(BIOMOD_EnsembleForecasting(EM.output = gbif_sdms$ensemble[[i]],
+                                projection.output = gbif_sdms$sdm_proj[[i]]))
 
 # try https://rdrr.io/rforge/biomod2/man/BIOMOD_EnsembleForecasting.html"""
-plot(BIOMOD_EnsembleForecasting( EM.output = test_sdms$`Pachycephala soror`[[3]][[1]],
-                            projection.output = test_sdms$`Pachycephala soror`[[4]][[1]])) #,
+#plot(BIOMOD_EnsembleForecasting(EM.output = test_sdms$`Pachycephala soror`[[3]][[1]],
+#                                projection.output = test_sdms$`Pachycephala soror`[[4]][[1]])) #,
 #                            new.env = NULL,
 #                            xy.new.env = NULL,
 #                            selected.models = 'all',
@@ -166,11 +174,15 @@ plot(BIOMOD_EnsembleForecasting( EM.output = test_sdms$`Pachycephala soror`[[3]]
 #                                clamping.mask = F,
 #                                output.format = '.grd' )
 #plot(ensemble_proj)
+  
+}
 ```
 ```{r sdm_proj, fig.height = 5, fig.width = 10} 
-for (i in 1:length(test_sdms$`Pachycephala soror`[[4]])) {
-  plot(test_sdms$`Pachycephala soror`[[4]][[i]])
-}
+#for (i in 1:length(test_sdms$`Pachycephala soror`[[4]])) {
+#  plot(test_sdms$`Pachycephala soror`[[4]][[i]])
+for (i in  1:length(gbif_birds)) {
+  plot(gbif_sdms$sdm_proj[[i]])
+  }
 ```
 
 

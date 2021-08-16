@@ -2,8 +2,8 @@
 # compare gbif with iucn for all birds j and sdms i
 par(mfrow=c(2,2))
 #pdf("plots.pdf")
-for (j in 1:length(test_sdms)) {
-  bird = test_sdms[[j]]
+for (j in 1:length(gbif_sdms$sdm_proj)) {
+  bird = gbif_sdms$sdm_proj[[j]]
   sdms = bird@proj@val@layers
   #bird_names = names(test_sdms[j])
   for (i in 1:length(sdms)) {
