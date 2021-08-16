@@ -10,8 +10,8 @@ output:
     code_folding: show
 ---
 
-```{r setup, include=FALSE, message = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.align = "center")
 ```
 
 # 1. Introduction
@@ -19,13 +19,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 2. Methods
 
+For the creation of this HTML document, the MCMMB.Rmd was knitted.
 To find the species to be used for our analysis we used the loops in bird_plot_loops.R to plot all species from the Gbif and IUCN data sets to find birds with sufficient observation points and different ranges to be used for our project.
 
 ## 2.1. Main script
 
 The required libraries and the setup of the IUCN and gbif data sets are done in the MCMMB_Main.R script. Notably, the HBIF data are created only for species with greater than 100 observations.The GBIF data were downloaded manually beforehand, however the r library "rgbif" could be used instead. Additionally, the island borders are read in and given the name "regio".
 
-```{r, results='hide'}
+```{r main, results = FALSE}
 source("MCMMB_Main.R")
 ```
 
@@ -34,8 +35,8 @@ source("MCMMB_Main.R")
 
 The script species_loops.R includes two functions each for creating lists with the input bird species data for gbif ("get_gbif_birds(bird_names,gbif_crop,regio)") and IUCN ("get_iucn_birds(bird_names,birdlife,regio)") and plotting them, respectively.
 
-```{r}
-# loading of the descriped functions
+```{r species_loops, fig.height = 5, fig.width = 10}
+# loading of the described functions
 source("species_loops.R")
 
 # cassowaries didn't have enough data
@@ -52,9 +53,11 @@ bird_names = c("Pachycephala lorentzi",
 # bird_names = c(your_favorite_species_here)
 
 # for plotting gbif data next to iucn data
-par(mfrow = c(2,length(bird_names)))
+par(mfrow = c(length(bird_names),2))
 
-# create list with birds out of the iucn and gbif data
+# create list with birds out of the iucn and gbif data and plot them
+# IUCN birdlife data is shown in red
+# GBIF points are shown in green
 iucn_birds = get_iucn_birds(bird_names,birdlife,regio)
 gbif_birds = get_gbif_birds(bird_names,gbif_crop,regio)
 ```
@@ -69,9 +72,10 @@ While biomod2 also brings with it capabilities to create pseudo-absence data, we
     2013."
     
 
-```{r}
+```{r presence_absence}
 # load presence_absence.R script including the function
 source("presence_absence.R")
+# par(mfrow = c(5,1))
 presence_absence_list = create_pseudo_absence(regio,gbif_birds)
 ```
 
@@ -115,14 +119,13 @@ source("plotting_sdms.R")
 #plot some nice plots here!
 ```
 
+# 4. Discussion
 
-## 7.2 Code
+# 5. Conclusion
 
+# Appendix
 
-MCMMB.Rmd
-
-```{r, eval = FALSE, code = xfun::read_utf8("MCMMB.Rmd"), class.source = "fold-hide"}
-```
+## Code
 
 MCMMB_Main.R
 
