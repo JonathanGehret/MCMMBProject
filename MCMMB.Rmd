@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.align = "center")
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.align = "center", cache = TRUE)
 ```
 
 # 1. Introduction
@@ -26,14 +26,14 @@ To find the species to be used for our analysis we used the loops in bird_plot_l
 
 The required libraries and the setup of the IUCN and gbif data sets are done in the MCMMB_Main.R script. Notably, the HBIF data are created only for species with greater than 100 observations.The GBIF data were downloaded manually beforehand, however the r library "rgbif" could be used instead. Additionally, the island borders are read in and given the name "regio".
 
-```{r main, results = FALSE}
+```{r main, results = FALSE, cache = FALSE}
 source("MCMMB_Main.R")
 ```
 
 
 ## 2.2. Species data  
 
-The script species_loops.R includes two functions each for creating lists with the input bird species data for gbif ("get_gbif_birds(bird_names,gbif_crop,regio)") and IUCN ("get_iucn_birds(bird_names,birdlife,regio)") and plotting them, respectively.
+The script species_loops.R includes two functions each for creating lists with the input bird species data for gbif ("get_gbif_birds(bird_names,gbif_crop,regio)") and IUCN ("get_iucn_birds(bird_names,birdlife,regio)") and plotting them, respectively. IUCN birdlife data is shown in red, GBIF points are shown in green.
 
 ```{r species_loops, fig.height = 5, fig.width = 10}
 # loading of the described functions
@@ -56,15 +56,14 @@ bird_names = c("Pachycephala lorentzi",
 par(mfrow = c(length(bird_names),2))
 
 # create list with birds out of the iucn and gbif data and plot them
-# IUCN birdlife data is shown in red
-# GBIF points are shown in green
 iucn_birds = get_iucn_birds(bird_names,birdlife,regio)
 gbif_birds = get_gbif_birds(bird_names,gbif_crop,regio)
 ```
 
 ## 2.3. Create presence-absence data
 
-While biomod2 also brings with it capabilities to create pseudo-absence data, we built a script to do it. First centroids for the area were created, based on that an equal number to the presence data of absence points is created.
+While biomod2 also brings with it capabilities to create pseudo-absence data, we built a script to do it, following the tutorial of the MCMMB lecture. First a raster grid of the region was needed, which was created by masking the elevation layer (compare 2.4.) over the regio shapefile of the observation area. From this mask centroids in the WGS84 projection were created. Based on these centroids the newly evoked presence_absence_list is populated by use of a for-loop. As the creation of the pseudo-absence data is chance-based, a seed was set. For every species included in the gbif_birds list handed over to create_pseudo_absence function, the pseudo-absence data is created at the randomly located centroids. The number of absence points is set equal to the number of presence points. These data points are then plotted with the real presence data, colored in green and red respectively. As a result the presence_absence_list is returned.
+
 
     "Be sure to take care when considering the use of pseudo-absences versus true absences for species distribution
     modeling. Similarly, it is extremely important to consider the influence of sampling bias in the data used to
@@ -72,10 +71,10 @@ While biomod2 also brings with it capabilities to create pseudo-absence data, we
     2013."
     
 
-```{r presence_absence}
+```{r presence_absence, fig.height = 3, fig.width = 10}
 # load presence_absence.R script including the function
 source("presence_absence.R")
-# par(mfrow = c(5,1))
+par(mfrow = c(1,5))
 presence_absence_list = create_pseudo_absence(regio,gbif_birds)
 ```
 
@@ -83,12 +82,12 @@ presence_absence_list = create_pseudo_absence(regio,gbif_birds)
 
 The Indicator.R script is used to read in data for the various indicators (precipitation, elevation, landcover, primary_forest, temperature, human population) to be used for the SDM. These are then cropped to the target region and saved in .tif format in the folder data/indicator_stack/ for later use. As the process for some of the bigger files takes a lot of time, ready to use indicator .tif files are to be found in the aforementioned folder. These will then be loaded and stacked later on before the sdm creation.
 
-```{r, eval = FALSE}
+```{r indicator, eval = FALSE}
 # where all the predictors are loaded in
 source("Indicator.R")
 ```
 
-```{r}
+```{r predictor_stacking}
 # stacking all predictors found in folder indicator stack in .tif format
 # predictors: elevation, precipitation, temperature, primary forest, landcover, population
 tif_predictors = stack(list.files(path = "data/indicator_stack/",
@@ -102,11 +101,79 @@ plot(tif_predictors)
 
 Using biomod2, the indicator stack, and the presence absence data with the gbif birds of interest the species distribution models with the methods GLM, GAM, RF and ANN are produced. There are also alternative methods available, which can be shown using "BIOMOD_ModelingOptions()". Each of the individual SDM versions can also be modified further, as can be seen in our script we modified k for the GAM (line 25). The data set was not split in two for evaluation, however this step could be done next time. The calculated models are saved to file (argument SaveObj = TRUE in BIOMOD_Modeling()).
 
-```{r,results='hide'}
-# loading biomod script and passing ensemble models to test_sdms
+```{r sdm, results='hide'}
+# loading biomod script and passing models to test_sdms
 source("sdm_biomod2.R")
 test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
 ```
+
+# keep this in 2 or also 3??
+
+```{r model_eval}
+for (i in 1:length(test_sdms$`Pachycephala soror`[[2]])) {
+  #get_evaluations(test_sdms$`Pachycephala soror`[[1]][[i]])
+  biomod_eval[i] = get_evaluations(test_sdms$`Pachycephala soror`[[1]][[i]])
+  biomod_eval[i]
+}
+```
+
+
+add this to 3? 
+ 
+ 
+```{r var_imp}
+#for (biomod_var_importance in test_sdms$`Pachycephala soror`[[2]]) {
+for (i in 1:length(test_sdms$`Pachycephala soror`[[2]])) {
+  #barplot(height = t(biomod_var_importance),
+  barplot(height = t(test_sdms$`Pachycephala soror`[[2]][[i]]),
+          beside = T,
+          horiz = T,
+          #ylab = c("Precipitation",...),
+          main = names(test_sdms$`Pachycephala soror`[[2]][i]),
+          xlab = "Variable Importance",
+          legend = c("GLM", "GAM", "ANN", "RF"))
+}
+# shows absolute number values!
+#test_sdms$`Pachycephala soror`[[2]][[1]]
+
+#names(test_sdms$`Pachycephala soror`[[2]])
+```
+```{r ensemble}
+
+#get_evaluations(test_sdms$`Pachycephala soror`[[3]][[1]])
+
+
+
+# try https://rdrr.io/rforge/biomod2/man/BIOMOD_EnsembleForecasting.html"""
+plot(BIOMOD_EnsembleForecasting( EM.output = test_sdms$`Pachycephala soror`[[3]][[1]],
+                            projection.output = test_sdms$`Pachycephala soror`[[4]][[1]])) #,
+#                            new.env = NULL,
+#                            xy.new.env = NULL,
+#                            selected.models = 'all',
+#                            proj.name = NULL,
+#                            binary.meth = NULL,
+#                            filtered.meth = NULL,
+#                            compress = TRUE,
+#                            ...)
+
+# currently no way to view ensemble model as "'modeling.output' must be the result of BIOMOD_Modeling() computation"
+#ensemble_proj = BIOMOD_Projection(modeling.output = test_sdms$`Pachycephala soror`[[3]][[1]],
+#                                new.env = stack(tif_predictors), # modern environment
+#                                proj.name = 'current' ,
+#                                selected.models = 'all' ,
+#                                binary.meth = 'TSS' ,
+#                                compress = 'xz' ,
+#                                clamping.mask = F,
+#                                output.format = '.grd' )
+#plot(ensemble_proj)
+```
+```{r sdm_proj, fig.height = 5, fig.width = 10} 
+for (i in 1:length(test_sdms$`Pachycephala soror`[[4]])) {
+  plot(test_sdms$`Pachycephala soror`[[4]][[i]])
+}
+```
+
+
 
 # 3. Results
 
@@ -114,7 +181,7 @@ test_sdms = calculate_sdm(presence_absence_list, tif_predictors)
 
 Plotting and comparing sdms with birdlife data.
 
-```{r}
+```{r smd_plots}
 source("plotting_sdms.R")
 #plot some nice plots here!
 ```

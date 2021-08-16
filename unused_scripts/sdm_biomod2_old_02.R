@@ -13,20 +13,8 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
   # for testing purposes
   #species = presence_absence_list[1]
   
-  # list for models
-  model_list = list()
-  
-  # list to be filled with visual sdms for every species put int
+  # list to be filled with sdms for every species put int
   sdm_list = list()
-  
-  # variable importance list
-  var_imp_list = list()
-  
-  # ensemble model list
-  ensemble_list = list()
-  
-  # output list to be filled with sdm_list, variable importance and ensemble_models
-  output_list = list()
   
   # modify model settings (i.e. k value (degrees of freedom) for GAM)
   # big but not too big for k
@@ -56,8 +44,8 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
                nodesize = 5,
                #nodesize = 50,
                maxnodes = NULL)
-    )
-
+  )
+  
   for (i in 1:length(presence_absence_list)) {
     
     # get bird_names 
@@ -67,23 +55,23 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     # species
     species = help_species[[1]]
     
-    # get coordinates from pres/abs data
+    # get coordinates from prese/abs data
     species_xy = data.frame(cbind(species$x, species$y))
-
+    
     # potentially: split dataset into two for evaluation data
     # putting the data into right format
     format_bm <- BIOMOD_FormatingData(resp.var = species$present,
-                                         expl.var = stack(tif_predictors),
-                                         resp.xy = species_xy,
-                                         resp.name = bird_name)
+                                      expl.var = stack(tif_predictors),
+                                      resp.xy = species_xy,
+                                      resp.name = bird_name)
     
     # modeling the sdms
     biomodels_1 <- BIOMOD_Modeling(data = format_bm,
-                                models = c('GLM','GAM','ANN','RF'),
-                                SaveObj = TRUE,
-                                models.options = myBiomodOptions,
-                                # DataSplit = 80, # common practice to validate!
-                                VarImport = 1)
+                                   models = c('GLM','GAM','ANN','RF'),
+                                   SaveObj = TRUE,
+                                   models.options = myBiomodOptions,
+                                   # DataSplit = 80, # common practice to validate!
+                                   VarImport = 1)
     
     "We will focus TSS (see Allouche et al. 2006 for a comparison of all three). TSS is the sum of the rates that
     we correctly classified presences and absences, minus 1. Higher is better (in the range -1 to 1), and represents
@@ -113,15 +101,13 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     agree on the importance of the variables?"
     
     biomod_var_importance = drop(get_variables_importance(biomodels_1))
+    barplot(height = t(biomod_var_importance),
+            beside = T,
+            horiz = T,
+            #ylab = c("Precipitation",...),
+            xlab = "Variable Importance",
+            legend = c("GLM", "GAM", "ANN", "RF"))
     
-    # plotting moved to markdown script
-    #barplot(height = t(biomod_var_importance),
-    #        beside = T,
-    #        horiz = T,
-    #        #ylab = c("Precipitation",...),
-    #        xlab = "Variable Importance",
-    #        legend = c("GLM", "GAM", "ANN", "RF"))
-
     "
     One approach for using the information in these various models is to combine them into an ensemble, or
     collection of models merged together (Thuiller et al. 2009). We can take all models above a given “quality”
@@ -163,19 +149,15 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     
     # to-do: make plots beautiful
     #plot(biomod_proj,xlab="Longitude")
-
-    #plot(biomod_proj)
+    par(mfrow = c(2,5))
+    plot(biomod_proj)
     
-    # write sd models to lists for return
-    model_list[[bird_name]] = biomodels_1
-    var_imp_list[[bird_name]] = biomod_var_importance
-    ensemble_list[[bird_name]] = biomod_ensemble
+    # write sd models to list for return
     sdm_list[[bird_name]] = biomod_proj
+    "Fehler in sdm_list[[bird_name]] <- biomod_proj : 
+  attempt to select less than one element in OneIndex"
   }
-  # combine all output lists into one list and return it
-  output_list = list(model_list,var_imp_list,ensemble_list,sdm_list)
-  names(output_list) = c("sdm","var_imp","ensemble","sdm_proj")
-  return(output_list)
+  return(sdm_list)
 }
 
 
