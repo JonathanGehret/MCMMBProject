@@ -125,61 +125,35 @@ add this to 3?
  
  
 ```{r var_imp}
-#for (biomod_var_importance in test_sdms$`Pachycephala soror`[[2]]) {
+# plotting variance importance plots
 for (i in 1:length(gbif_birds)) {
-  #barplot(height = t(biomod_var_importance),
-  #barplot(height = t(test_sdms$`Pachycephala soror`[[2]][[i]]),
+
   barplot(height = t(gbif_sdms$var_imp[[i]]),
           beside = T,
           horiz = T,
           #ylab = c("Precipitation",...),
-          #main = names(test_sdms$`Pachycephala soror`[[2]][i]),
           main = names(gbif_sdms$var_imp[i]),
           xlab = "Variable Importance",
           legend = c("GLM", "GAM", "ANN", "RF"))
 }
 # shows absolute number values!
 #test_sdms$`Pachycephala soror`[[2]][[1]]
-
+  attributes(gbif_sdms[["var_imp"]][[names(gbif_birds[i])]])[["dimnames"]][[1]]
+  attributes(gbif_sdms[["var_imp"]][["Pachycephala schlegelii"]])[["dimnames"]][[1]] = c("a,b,c,d")
 #names(test_sdms$`Pachycephala soror`[[2]])
 ```
-```{r ensemble}
+```{r ensemble, results = 'hide'}
 
-#get_evaluations(test_sdms$`Pachycephala soror`[[3]][[1]])
-
+# plotting and evaluations for the ensemble models
 for (i in 1:length(gbif_birds)) {
-  
-plot(BIOMOD_EnsembleForecasting(EM.output = gbif_sdms$ensemble[[i]],
-                                projection.output = gbif_sdms$sdm_proj[[i]]))
-
-# try https://rdrr.io/rforge/biomod2/man/BIOMOD_EnsembleForecasting.html"""
-#plot(BIOMOD_EnsembleForecasting(EM.output = test_sdms$`Pachycephala soror`[[3]][[1]],
-#                                projection.output = test_sdms$`Pachycephala soror`[[4]][[1]])) #,
-#                            new.env = NULL,
-#                            xy.new.env = NULL,
-#                            selected.models = 'all',
-#                            proj.name = NULL,
-#                            binary.meth = NULL,
-#                            filtered.meth = NULL,
-#                            compress = TRUE,
-#                            ...)
-
-# currently no way to view ensemble model as "'modeling.output' must be the result of BIOMOD_Modeling() computation"
-#ensemble_proj = BIOMOD_Projection(modeling.output = test_sdms$`Pachycephala soror`[[3]][[1]],
-#                                new.env = stack(tif_predictors), # modern environment
-#                                proj.name = 'current' ,
-#                                selected.models = 'all' ,
-#                                binary.meth = 'TSS' ,
-#                                compress = 'xz' ,
-#                                clamping.mask = F,
-#                                output.format = '.grd' )
-#plot(ensemble_proj)
-  
-}
+  plot(BIOMOD_EnsembleForecasting(EM.output = gbif_sdms$ensemble[[i]],
+                                  projection.output = gbif_sdms$sdm_proj[[i]],
+                                  selected.models = 'all'))
+  get_evaluations(gbif_sdms$ensemble[[i]])
+  }
 ```
 ```{r sdm_proj, fig.height = 5, fig.width = 10} 
-#for (i in 1:length(test_sdms$`Pachycephala soror`[[4]])) {
-#  plot(test_sdms$`Pachycephala soror`[[4]][[i]])
+# plotting all sdms
 for (i in  1:length(gbif_birds)) {
   plot(gbif_sdms$sdm_proj[[i]])
   }
