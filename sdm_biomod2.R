@@ -82,36 +82,10 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
                                 models = c('GLM','GAM','ANN','RF'),
                                 SaveObj = TRUE,
                                 models.options = myBiomodOptions,
-                                # DataSplit = 80, # common practice to validate!
+                                # DataSplit = 80, # could be used for validation data
                                 VarImport = 1)
     
-    "We will focus TSS (see Allouche et al. 2006 for a comparison of all three). TSS is the sum of the rates that
-    we correctly classified presences and absences, minus 1. Higher is better (in the range -1 to 1), and represents
-    a balance between model maximizing sensitivity and specificity."
-    
-    # add to markdown?? use other indicators??
-    #biomod_eval = get_evaluations(biomodels_1)
-    #biomod_eval["TSS","Testing.data",,,]
-    #biomod_eval["KAPPA","Testing.data",,,]
-    #biomod_eval["ROC","Testing.data",,,]
-    #evaluate(biomodels_1, data, stat, as.array=FALSE)
-    
-    " GLM   GAM   ANN    RF 
-    0.725    NA 0.757 0.938 "
-    #>     biomod_eval["TSS","Testing.data",,,]
-    #GLM   GAM   ANN    RF 
-    #1.000 1.000 1.000 0.967 
-    #>     biomod_eval["KAPPA","Testing.data",,,]
-    #GLM   GAM   ANN    RF 
-    #1.000 1.000 1.000 0.967 
-    #>     biomod_eval["ROC","Testing.data",,,]
-    #GLM   GAM   ANN    RF 
-    #1.000 1.000 1.000 0.999 
-    
-    "We can also calculate variable importances to compare influences of individual predictor variables within and
-    among models. For a publication, you might also create partial dependence plots. Do the different models
-    agree on the importance of the variables?"
-    
+    # calculate variance importance
     biomod_var_importance = drop(get_variables_importance(biomodels_1))
     
     # plotting moved to markdown script
@@ -122,11 +96,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
     #        xlab = "Variable Importance",
     #        legend = c("GLM", "GAM", "ANN", "RF"))
 
-    "
-    One approach for using the information in these various models is to combine them into an ensemble, or
-    collection of models merged together (Thuiller et al. 2009). We can take all models above a given “quality”
-    threshold and combine them."
-    
+    # put model together into an ensemble
     biomod_ensemble = BIOMOD_EnsembleModeling(modeling.output = biomodels_1,
                                               chosen.models = 'all',
                                               em.by = 'all',
@@ -138,20 +108,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
                                               prob.ci = FALSE,
                                               prob.median = FALSE)
     
-    #get_evaluations(biomod_ensemble)
-    "$Test.Spec_EMmeanByTSS_mergedAlgo_mergedRun_mergedData
-          Testing.data Cutoff Sensitivity Specificity
-    KAPPA        0.846    564       93.75      90.909
-    TSS          0.847    564       93.75      90.909
-    ROC          0.979    562       93.75      90.909
-    "
-    
-    
-    "In order to visualize the model outputs, we should now use the SDMs to predict species occurrence across
-    space using our modern environmental data. The models predict probabilities of occurrence, and it is
-    important to remember the interpretation of these outputs depend on the specific model, our data, and our
-    assumptions (e.g., see discussion of Maxent outputs in Merow et al 2013)."
-    
+    # creation of projections for sdm visualization by plotting
     biomod_proj = BIOMOD_Projection(modeling.output = biomodels_1,
                                     new.env = stack(tif_predictors), # modern environment
                                     proj.name = 'current' ,
@@ -161,9 +118,7 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
                                     clamping.mask = F,
                                     output.format = '.grd' )
     
-    # to-do: make plots beautiful
-    #plot(biomod_proj,xlab="Longitude")
-
+    # plot moved to .rmd
     #plot(biomod_proj)
     
     # write sd models to lists for return

@@ -227,10 +227,10 @@ for (i in  1:length(bird_names)) {
   gbif_sdms[["sdm_proj"]][[bird_names[i]]]@models.projected = model_names 
 }
 ```
-
 ## 3.4. Ensemble plots
 
-    " One approach for using the information in these various models is to combine them into an ensemble, or
+    "
+    One approach for using the information in these various models is to combine them into an ensemble, or
     collection of models merged together (Thuiller et al. 2009). We can take all models above a given “quality”
     threshold and combine them." Griffith (2017)
 

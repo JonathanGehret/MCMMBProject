@@ -37,6 +37,3 @@ get_gbif_birds <- function(bird_names,gbif_crop,regio) {
   }
   return(gbif_birds)
 }
-
-# legend("bottomleft", legend = c("Casuarius unappendiculatus","Casuarius bennetti","Casuarius casuarius"), 
-#       fill = c("black","red","yellow"))
