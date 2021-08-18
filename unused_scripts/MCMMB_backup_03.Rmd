@@ -247,7 +247,7 @@ for (i in  1:length(bird_names)) {
   bird_name = bird_names[i]
   model_names = gbif_sdms[["sdm_proj"]][[bird_name]]@models.projected
   gbif_sdms[["sdm_proj"]][[bird_name]]@models.projected = c("GLM", "GAM", "ANN", "RF")
-  # saved plots separately in folder plots which are plotted afterwards, for formatting reasons, also works without
+  # saved plots separately in folder plots which are plotted afterwards, as alignment using par and other options didn't work
   png(file = paste0("plots/", strsplit(bird_name, split = " ")[[1]][1],"_", strsplit(bird_name, split = " ")[[1]][2],".png"))
   plot(gbif_sdms$sdm_proj[[i]])
   dev.off()
@@ -256,13 +256,11 @@ for (i in  1:length(bird_names)) {
 ```
 <center>
 
-![](plots/Pachycephala_Lorentzi.png){width=45%} ![](plots/Pachycephala_Meyeri.png){width=45%}
+![**3.1.1: plot 1**](plots/Pachycephala_Lorentzi.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_Meyeri.png){width=45%}
 
-![](plots/Pachycephala_schlegelii.png){width=45%} ![](plots/Pachycephala_soror.png){width=45%} 
+![**3.1.2: plot 2**](plots/Pachycephala_schlegelii.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_soror.png){width=45%} 
 
 </center>
-
-**Figure 3.3. Plots of the species with subplots for the different SDMs**
 
 ## 3.4. Ensemble plots
 
@@ -284,19 +282,17 @@ for (i in 1:length(bird_names)) {
 ```
 <center>
 
-![](plots/Pachycephala_Lorentzi_ensemble.png){width=45%} ![](plots/Pachycephala_Meyeri_ensemble.png){width=45%}
+![**3.1.1: plot 1**](plots/Pachycephala_Lorentzi_ensemble.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_Meyeri_ensemble.png){width=45%}
 
-![](plots/Pachycephala_schlegelii_ensemble.png){width=45%} ![](plots/Pachycephala_soror_ensemble.png){width=45%}
+![**3.1.2: plot 2**](plots/Pachycephala_schlegelii_ensemble.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_soror_ensemble.png){width=45%}
 
 </center>
-
-**Figure 3.xx. Ensemble plots for the four species** 
 
 ## 3.5. Comparison SDMs and IUCN
 
 Plotting and comparing sdms with birdlife data.
 
-```{r sdm_iucn, echo = FALSE, out.width = "150%"}
+```{r smd_plots, echo = FALSE, out.width = "150%"}
 # compare gbif sdms with iucn for all birds j and sdms i
 par(mfrow=c(2,2))
 for (j in 1:length(bird_names)) {
