@@ -72,13 +72,13 @@ calculate_sdm = function(presence_absence_list, tif_predictors) {
 
     # potentially: split dataset into two for evaluation data
     # putting the data into right format
-    format_bm <- BIOMOD_FormatingData(resp.var = species$present,
+    format_bm = BIOMOD_FormatingData(resp.var = species$present,
                                          expl.var = stack(tif_predictors),
                                          resp.xy = species_xy,
                                          resp.name = bird_name)
     
     # modeling the sdms
-    biomodels_1 <- BIOMOD_Modeling(data = format_bm,
+    biomodels_1 = BIOMOD_Modeling(data = format_bm,
                                 models = c('GLM','GAM','ANN','RF'),
                                 SaveObj = TRUE,
                                 models.options = myBiomodOptions,

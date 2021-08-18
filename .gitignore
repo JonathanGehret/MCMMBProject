@@ -11,3 +11,9 @@ models
 MCMMB_files/
 Pachycephala.*/
 htmls/
+plots/
+MCMMB_cache/
+MCMMB_test_cache/
+MCMMB_test_files/
+.txt
+.png

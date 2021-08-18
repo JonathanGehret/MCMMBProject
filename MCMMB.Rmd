@@ -72,7 +72,7 @@ source("species_loops.R")
 bird_names = c("Pachycephala lorentzi", 
                "Pachycephala meyeri", 
                "Pachycephala schlegelii",
-               "Pachycephala simplex",
+               #"Pachycephala simplex", # this species doesn't appear in the birdlife data set on the island
                "Pachycephala soror")
 
 # these names can be changed to any other bird species occuring in the data sets, for fully automated creation of sdms following this markdown file:
@@ -100,7 +100,7 @@ While biomod2 also brings with it capabilities to create pseudo-absence data, we
 ```{r presence_absence, fig.height = 3, fig.width = 10}
 # load presence_absence.R script including the function
 source("presence_absence.R")
-par(mfrow = c(1,5))
+par(mfrow = c(1,length(bird_names)))
 presence_absence_list = create_pseudo_absence(regio,gbif_birds)
 ```
 
@@ -140,7 +140,7 @@ These combined data are then called by BIOMOD_Modeling(), where the desired mode
 ```{r biomod_modeling, eval = FALSE}
 # not to be executed example code taken from sdm_biomod2.R
     # modeling the sdms
-    biomodels_1 <- BIOMOD_Modeling(data = format_bm,
+    biomodels_1 = BIOMOD_Modeling(data = format_bm,
                                 models = c('GLM','GAM','ANN','RF'),
                                 SaveObj = TRUE,
                                 models.options = myBiomodOptions,
@@ -220,14 +220,14 @@ get_evaluations(gbif_sdms$ensemble[[1]])
     
  
 ```{r var_imp, echo = FALSE, fig.height = 10, fig.width = 10}
-par(mfrow = c(3,2))
+par(mfrow = c(2,2))
 # plotting variance importance plots
 for (i in 1:length(bird_names)) {
   attributes(gbif_sdms[["var_imp"]][[names(gbif_birds[i])]])[["dimnames"]][[1]] = c("EV", "Pop", "LC", "Prec", "PF", "Temp")
   barplot(height = t(gbif_sdms$var_imp[[i]]),
           beside = T,
           horiz = T,
-          main = names(gbif_sdms$var_imp[i]),
+          main = bird_names[i],
           xlab = "Variable Importance",
           legend = c("GLM", "GAM", "ANN", "RF"))
 }
@@ -256,8 +256,7 @@ for (i in  1:length(bird_names)) {
 ```
 
 ![**3.1.1: plot 1**](plots/Pachycephala_Lorentzi.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_Meyeri.png){width=45%}
-![**3.1.2: plot 2**](plots/Pachycephala_schlegelii.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_simplex.png){width=45%}
-![**3.1.2: plot 2**](plots/Pachycephala_soror.png){width=45%} 
+![**3.1.2: plot 2**](plots/Pachycephala_schlegelii.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_soror.png){width=45%} 
 
 ## 3.4. Ensemble plots
 
@@ -278,53 +277,37 @@ for (i in 1:length(bird_names)) {
   }
 ```
 ![**3.1.1: plot 1**](plots/Pachycephala_Lorentzi_ensemble.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_Meyeri_ensemble.png){width=45%}
-![**3.1.2: plot 2**](plots/Pachycephala_schlegelii_ensemble.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_simplex_ensemble.png){width=45%}
-![**3.1.2: plot 2**](plots/Pachycephala_soror_ensemble.png){width=45%} 
+![**3.1.2: plot 2**](plots/Pachycephala_schlegelii_ensemble.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_soror_ensemble.png){width=45%} 
 
 ## 3.5. Comparison SDMs and IUCN
 
 Plotting and comparing sdms with birdlife data.
 
-```{r smd_plots}
-#source("plotting_sdms.R")
-#plot some nice plots here!
-
-
-# Evaluation
-# compare gbif with iucn for all birds j and sdms i
+```{r smd_plots, echo = FALSE, out.width = "150%"}
+# compare gbif sdms with iucn for all birds j and sdms i
 par(mfrow=c(2,2))
-#pdf("plots.pdf")
-for (j in 1:length(gbif_sdms$sdm_proj)) {
+for (j in 1:length(bird_names)) {
   bird = gbif_sdms$sdm_proj[[j]]
   sdms = bird@proj@val@layers
   #bird_names = names(test_sdms[j])
   for (i in 1:length(sdms)) {
     sdm = sdms[[i]]
-    plot(sdm, main = names(sdm@data))
+    plot(sdm, main = paste(bird_names[j], strsplit(names(sdm@data), split = "_")[[1]][4]))
     plot(iucn_birds[[j]], add = T, col =  rgb(red = 0, green = 0, blue = 1, alpha = 0.3))
   }
-  #plot_names = paste("images/sdm_iucn/",names(i),".png")
-  
-  #savePlot(filename = plot_names, type = "png")
-  #tiff("images/sdm_iucn/.tiff")
 }
 ```
-```{r, eval = FALSE}
+
+```{r ensemble_iucn, results='hide', echo = FALSE, out.width = "150%"}
+# compare gbif ensemble SDMs for all species
 par(mfrow=c(2,2))
-#pdf("plots.pdf")
-for (j in 1:length(gbif_sdms$sdm_proj)) {
-  bird = gbif_sdms$sdm_proj[[j]]
-  sdms = bird@proj@val@layers
-  #bird_names = names(test_sdms[j])
-  for (i in 1:length(sdms)) {
-    sdm = sdms[[i]]
-    plot(sdm, main = names(sdm@data))
-    plot(iucn_birds[[j]], add = T, col =  rgb(red = 0, green = 0, blue = 1, alpha = 0.3))
-  }
-  #plot_names = paste("images/sdm_iucn/",names(i),".png")
-  
-  #savePlot(filename = plot_names, type = "png")
-  #tiff("images/sdm_iucn/.tiff")
+for (i in 1:length(bird_names)) {
+  sdm_ensemble = BIOMOD_EnsembleForecasting(EM.output = gbif_sdms$ensemble[[i]],
+                                            projection.output = gbif_sdms$sdm_proj[[i]],
+                                            selected.models = 'all')
+  sdm = sdm_ensemble@proj@val
+  plot(sdm, main = paste(bird_names[i], "ensemble"))
+  plot(iucn_birds[[i]], add = T, col =  rgb(red = 0, green = 0, blue = 1, alpha = 0.3))
 }
 
 ```
