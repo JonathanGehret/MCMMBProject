@@ -196,20 +196,20 @@ for (i in 1:length(bird_names)) {
 }
 
 names(biomod_eval) = bird_names
-#biomod_eval
+biomod_eval
 
 # somehow this doesn't work in loop
-biomod_eval[[1]]
+#biomod_eval[[1]]
 #biomod_eval[[2]]
 #biomod_eval[[3]]
 #biomod_eval[[4]]
 #biomod_eval[[5]]
 
 get_evaluations(gbif_sdms$ensemble[[1]])
-#get_evaluations(gbif_sdms$ensemble[[2]])
-#get_evaluations(gbif_sdms$ensemble[[3]])
-#get_evaluations(gbif_sdms$ensemble[[4]])
-#get_evaluations(gbif_sdms$ensemble[[5]])
+get_evaluations(gbif_sdms$ensemble[[2]])
+get_evaluations(gbif_sdms$ensemble[[3]])
+get_evaluations(gbif_sdms$ensemble[[4]])
+get_evaluations(gbif_sdms$ensemble[[5]])
 ```
 
 ## 3.2. Variance importance
@@ -241,23 +241,17 @@ for (i in 1:length(bird_names)) {
     assumptions (e.g., see discussion of Maxent outputs in Merow et al 2013)." Griffith (2017)
 
 ```{r sdm_proj, fig.height = 5, fig.width = 10, echo = FALSE} 
+par(mfrow = c(3,2))
 # plotting all sdms
 for (i in  1:length(bird_names)) {
   # for visualisation, the projected names are renamed, and then reset for further use in ensemble creation
-  bird_name = bird_names[i]
-  model_names = gbif_sdms[["sdm_proj"]][[bird_name]]@models.projected
-  gbif_sdms[["sdm_proj"]][[bird_name]]@models.projected = c("GLM", "GAM", "ANN", "RF")
-  # saved plots separately in folder plots which are plotted afterwards, as alignment using par and other options didn't work
-  png(file = paste0("plots/", strsplit(bird_name, split = " ")[[1]][1],"_", strsplit(bird_name, split = " ")[[1]][2],".png"))
+  model_names = gbif_sdms[["sdm_proj"]][[bird_names[i]]]@models.projected
+  gbif_sdms[["sdm_proj"]][[bird_names[i]]]@models.projected = c("GLM", "GAM", "ANN", "RF")
+  #tiff(file = paste("plots/", bird_names[i],".tiff", sep = ""))
   plot(gbif_sdms$sdm_proj[[i]])
-  dev.off()
-  gbif_sdms[["sdm_proj"]][[bird_name]]@models.projected = model_names 
+  gbif_sdms[["sdm_proj"]][[bird_names[i]]]@models.projected = model_names 
 }
 ```
-
-![**3.1.1: plot 1**](plots/Pachycephala_Lorentzi.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_Meyeri.png){width=45%}
-![**3.1.2: plot 2**](plots/Pachycephala_schlegelii.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_simplex.png){width=45%}
-![**3.1.2: plot 2**](plots/Pachycephala_soror.png){width=45%} 
 
 ## 3.4. Ensemble plots
 
@@ -269,17 +263,12 @@ for (i in  1:length(bird_names)) {
 par(mfrow = c(3,2))
 # plotting for the ensemble models
 for (i in 1:length(bird_names)) {
-  bird_name = bird_names[i]
-  png(file = paste0("plots/", strsplit(bird_name, split = " ")[[1]][1],"_", strsplit(bird_name, split = " ")[[1]][2],"_ensemble.png"))
   plot(BIOMOD_EnsembleForecasting(EM.output = gbif_sdms$ensemble[[i]],
                                   projection.output = gbif_sdms$sdm_proj[[i]],
                                   selected.models = 'all'))
-  dev.off()
   }
 ```
-![**3.1.1: plot 1**](plots/Pachycephala_Lorentzi_ensemble.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_Meyeri_ensemble.png){width=45%}
-![**3.1.2: plot 2**](plots/Pachycephala_schlegelii_ensemble.png){width=45%} ![**3.1.2: plot 2**](plots/Pachycephala_simplex_ensemble.png){width=45%}
-![**3.1.2: plot 2**](plots/Pachycephala_soror_ensemble.png){width=45%} 
+
 
 ## 3.5. Comparison SDMs and IUCN
 
