@@ -2,6 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+*.txt
+*.png
 data/Papua_Birdlife_project/Birdlife_Papua.shp
 data/Papua_Birdlife_project/Papua_Birldife_project.rar
 data/Indicator
@@ -15,5 +17,3 @@ plots/
 MCMMB_cache/
 MCMMB_test_cache/
 MCMMB_test_files/
-.txt
-.png

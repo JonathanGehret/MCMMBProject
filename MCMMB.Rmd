@@ -347,11 +347,6 @@ sdm_biomod2.R
 ```{r, eval = FALSE, code = xfun::read_utf8("sdm_biomod2.R"), class.source = "fold-hide"}
 ```
 
-plotting_sdms.R
-
-```{r, eval = FALSE, code = xfun::read_utf8("plotting_sdms.R"), class.source = "fold-hide"}
-```
-
 bird_plot_loops.R
 
 ```{r, eval = FALSE, code = xfun::read_utf8("bird_plot_loops.R"), class.source = "fold-hide"}
