@@ -1,7 +1,7 @@
 ---
 title: How do IUCN Range maps of birds compare to SDMs in Indonesian New Guinea? What
   are the main predictors for this distribution?
-author: "Jonathan Gehret, Paul Leister"
+author: "Jonathan Gehret, Matr.-Nr.: 23301512, Paul Leister"
 date: "31.08.2021"
 output:
   html_document:
@@ -33,6 +33,30 @@ Papua Papua barat Size: 319.036,05 km² Size: 115.364 km² Citizen: 4.354.468 Ci
 # 2. Theory
 
 # 2. Methods
+
+## 2.x Creation process?
+Gibts sowas zu schreiben?
+Zum finden der ARten: loops for plotting all species (iusn sowie GBIF)
+Erster Ansatz mit Kasuaren, aber zu wenig Daten! -> in the case of low amount of observation data, some research has been done on how to proceed in cases like this. While this is definitely a very interesting area of study, we decided that pursuing these approaches would exceed the time-investment deemed reasonable to invest into this work. It could be pursued in future work. (Briscoe, Fois, Lomba)
+Entscheidung, Pseudo-absenzdaten selbst zu basteln anstatt biomod2 dafür zu verwenden
+First the scripts for the singular steps were created, then for continuous use going through the markdown file some of the scripts were changed to be functions and the markdown script was built in a way to easily create those SDMs with our methods for any chosen bird species of the GBIF data set! Only slight modifications are needed:
+Change of species names, adjustment of some variable names, names of images to be plotted 
+Used libraries:
+Biomod2 for SDM creation with plenty of nice relevant tools
+Raster for work with the raster data
+Sf for work with spatial points
+Rgdal for reading in and working with shapefiles, eg readOGR
+What about rgeos, spatialeco, dplyr -> do we need these
+Workaround for better image alignment was saving some images in a folder and the plotting them. Could also plot directly from loop, as was done in some other cases, however alignment wasn’t so nice then. 
+
+
+## 2.z : .rmd: markdown desciritio
+All the scripts were put into one markdown file, namely MCMMB.rmd. Visual appeal was maximised by setting of plot sizes etc. Use of cache, fig.width, fig.height. e.g.. Hiding of warnings, results.
+
+Important code was displayed in the .rmd, other code can be found in the appendix.
+
+Careful consideration was taking on which plots to include and which to leave out/put into the appendix.
+
 
 For the creation of this HTML document, the MCMMB.Rmd was knitted. 
 
@@ -309,7 +333,8 @@ for (i in 1:length(bird_names)) {
 
 ## 3.5. Comparison SDMs and IUCN
 
-Plotting and comparing SDMs with birdlife data.
+Overlaying the calculated SDMs with the range maps received from IUCN birdlife shows varying degrees of overlap, depending on species and model used. Some example cases include the GLM (and the very similar looking ANN) for P. lorentzi, which overlap completely with the IUCN range data, only the modelled area is a lot smaller than what was expected in the birdlife data. In other cases, such as P. meyeri, all of the models predict a much larger range, specifically also in the central mountains, than IUCN which shows they only appear at the northernmost area of Papua Barat. P. schlegelii and P. soror Birdlife populations are fragmented, which is als the case for the modelled SDMs, only it is very hit and miss where the areas overlap and where they don’t.
+
 
 ```{r sdm_iucn, echo = FALSE, out.width = "150%"}
 # compare GBIF SDMs with IUCN for all birds j and SDMs i
@@ -330,6 +355,8 @@ for (j in 1:length(bird_names)) {
 
 ## 3.6. Comparison ensemble SDMs and IUCN
 
+The Ensemble/IUCN comparison is analogous to the previous section. The depictions are a combination of the other SDMs.
+
 ```{r ensemble_iucn, results='hide', echo = FALSE, out.width = "150%"}
 # compare GBIF ensemble SDMs for all species
 par(mfrow=c(2,2))
@@ -348,7 +375,39 @@ for (i in 1:length(bird_names)) {
 
 # 4. Discussion
 
+
+Data validation
+How many percent of the present data,
+How much of the habitat is covered by the SDMs?
+Why is the SDM realsitic/unrealistic? → where do the food resources occur etc.
+Validate the data sources (less points, only in areas with high population density….)
+Warum manche keine einfluss?
+
+What can be seen in the results?
+
+Looking at the results, while there is noticeable overlap and good tendency, especially in the mountain ranges, the modelled ranges generally differ from the IUCN birdlife ranges in multiple areas. Reasons for this discrepancy lie in some possibly important indicators missing, like food sources or geographical barriers. Another likely reason is that some fine-tuning of the models could be valuable to deliver more accurate results.
+Sehr wichtig: Bias of the areas were data was taken!! → nur einzelne punkte, zb sehr relevant für höhenmeter. 
+“We use a common Eurasian butterfly (Aglais urticae) as an exemplar taxon to provide evidence that range model quality is decreasing due to the spatial clustering of distributional records in GBIF. Furthermore, we show that such loss of model quality would go unnoticed with standard methods of model quality evaluation.“ (Beck et al., 2014).  https://www.sciencedirect.com/science/article/abs/pii/S1574954113001155
+Also include: fressfeinde, nahrungskonkurrenten, food resouces, symbiotische arten, 
+Zb wo kommt der baum vor
+As there are many available options, i.e. in biomod2’s own BIOMOD_ModelingOptions(), the use of validation data, more sophisticated creation of pseudo-absence data or even inclusion of real absence data, surely some improvements can be made.
+
+
+
+
+On ensemble models: https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12892
+“A review of evidence about use and performance of species distribution modelling ensembles like BIOMOD”
+“The idea of combining predictions from different models into an ensemble has gained considerable popularity in species distribution modelling, partly due to free and comprehensive software such as the R package BIOMOD. However, despite proliferation of ensemble models, we lack oversight of how and where they are used for modelling distributions, and how well they perform. “ (Hao et al., 2019)
+ One could argue that in the case of a suboptimal model, the results get worsened by being put together.
+
+
+
 # 5. Conclusion
+
+The biomod2 library in R is a powerful tool to create with easily modifiable settings a range of different SDMs, given just some species presence data and a range of indicator raster files. Using said library multiple SDMs were created for four bird species in Indonesia based on GBIF occurrence data. These SDMs were compared to IUCN birdlife data. Some overlap in the modelled and test distribution ranges was found, however a lot of at times unrealistic results were created. Different elements like bias in the selected data, lack of possibly important predictors and options to change are important places to consider improving. There are many ways imaginable to expand on this work.
+
+The SDMs have some overlap, however more research is needed to get towards more trustworthy SDMs.
+
 
 # References
 
