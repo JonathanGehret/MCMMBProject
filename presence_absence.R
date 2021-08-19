@@ -36,7 +36,7 @@ create_pseudo_absence = function(regio, bird_list) {
     centroids_occ@proj4string = CRS("+proj=longlat +ellps=WGS84 +no_defs")
 
     # create absence data added to presence data
-    presence_absence <- rbind(centroids_all[sample(nrow(centroids_all),nrow(centroids_occ), replace = TRUE),],
+    presence_absence = rbind(centroids_all[sample(nrow(centroids_all),nrow(centroids_occ), replace = TRUE),],
                          centroids_occ)
     
     # add to list

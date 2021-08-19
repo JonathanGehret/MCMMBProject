@@ -19,7 +19,7 @@ get_iucn_birds = function(bird_names,birdlife,regio) {
     iucn_birds[[i]] = iucn_bird
     #plotting optional
     plot(regio, main = i)
-    plot(iucn_bird, add = T, col = "red")
+    plot(iucn_bird, add = T, col = "blue")
   }
   return(iucn_birds)
 }
@@ -33,7 +33,7 @@ get_gbif_birds <- function(bird_names,gbif_crop,regio) {
     gbif_birds[[i]] = gbif_bird
     #plotting optional
     plot(regio, main = i) 
-    plot(st_geometry(gbif_bird), pch=16, col="green", add = TRUE) 
+    plot(st_geometry(gbif_bird), pch=16, col="red", add = TRUE) 
   }
   return(gbif_birds)
 }
