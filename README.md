@@ -8,5 +8,5 @@ Working with R, during the project, range maps of bird distribution were collect
 
 Further, predictors such as elevation, precipitation and habitat conservation status were collected from various sources.
 
-Applying various models, range maps for these species are preadicted based on the observation data and the predictors by using the `biomod2` libaray in R, and these are then compared to the original range maps.
+Applying various models, range maps for these species are predicted based on the observation data and the predictors by using the `biomod2` libaray in R, and these are then compared to the original range maps.
 
