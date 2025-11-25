@@ -1,19 +1,36 @@
+# R Session files
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-*.txt
-*.png
-data/Papua_Birdlife_project/Birdlife_Papua.shp
-data/Papua_Birdlife_project/Papua_Birldife_project.rar
-data/Indicator
-data/gbif
-mcmmb_markdown
-models
-MCMMB_files/
-Pachycephala.*/
-htmls/
-plots/
+
+# RMarkdown cache and output files
 MCMMB_cache/
 MCMMB_test_cache/
 MCMMB_test_files/
+MCMMB_files/
+htmls/
+
+# Model outputs (can be regenerated)
+models/
+Pachycephala.*/
+plots/
+
+# Large data files (need to be downloaded separately)
+data/Indicator/
+data/gbif/
+data/Papua_Birdlife_project/Birdlife_Papua.shp
+data/Papua_Birdlife_project/Papua_Birldife_project.rar
+
+# Temporary/working directories
+mcmmb_markdown/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE settings (optional - uncomment if you want to keep local settings)
+# .vscode/
+
+# Note: .txt and .png files are needed for the project
+# If you want to ignore specific ones, list them explicitly
